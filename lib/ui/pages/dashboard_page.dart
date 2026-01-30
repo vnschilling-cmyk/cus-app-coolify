@@ -128,39 +128,32 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
 
     return SizedBox(
       height: 300,
-      child: PieChart(
-        PieChartData(
-          sectionsSpace: 2,
-          centerSpaceRadius: 40,
-          pieTouchData: PieTouchData(
-            touchCallback: (FlTouchEvent event, pieTouchResponse) {
-              if (!event.isInterestedForInteractions ||
-                  pieTouchResponse == null ||
-                  pieTouchResponse.touchedSection == null) {
-                return;
-              }
-              if (event is FlTapUpEvent) {
-                setState(() {
-                  _showAbsoluteNumbers = !_showAbsoluteNumbers;
-                });
-              }
-            },
-          ),
-          sections: typeCounts.entries.toList().asMap().entries.map((entry) {
-            final value = entry.value;
-            final percentage =
-                (value.value / leads.length * 100).toStringAsFixed(0);
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _showAbsoluteNumbers = !_showAbsoluteNumbers;
+          });
+        },
+        child: PieChart(
+          PieChartData(
+            sectionsSpace: 2,
+            centerSpaceRadius: 40,
+            pieTouchData: PieTouchData(enabled: false),
+            sections: typeCounts.entries.toList().asMap().entries.map((entry) {
+              final value = entry.value;
+              final percentage =
+                  (value.value / leads.length * 100).toStringAsFixed(0);
 
-            final color = colors[entry.key % colors.length];
-            String label = value.key;
+              final color = colors[entry.key % colors.length];
+              String label = value.key;
 
-            // Format label: split by / or specific handling for long names
-            if (label.contains('/')) {
-              label = label.replaceAll('/', '\n');
-            } else if (label.startsWith('Selbständige') ||
-                label.startsWith('Selbstständige')) {
-              label = label.replaceFirst(' ', '\n');
-            }
+              // Format label: split by / or specific handling for long names
+              if (label.contains('/')) {
+                label = label.replaceAll('/', '\n');
+              } else if (label.startsWith('Selbständige') ||
+                  label.startsWith('Selbstständige')) {
+                label = label.replaceFirst(' ', '\n');
+              }
 
             return PieChartSectionData(
               color: color,
