@@ -420,21 +420,32 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
                 ),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? Colors.greenAccent.withValues(alpha: 0.1)
-                      : Colors.white.withValues(alpha: 0.02),
+                      ? const Color(0xFF10B981).withValues(alpha: 0.1)
+                      : Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: isSelected
-                        ? Colors.greenAccent.withValues(alpha: 0.3)
-                        : Colors.white.withValues(alpha: 0.05),
+                        ? const Color(0xFF10B981)
+                        : Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withValues(alpha: 0.1),
                   ),
                 ),
                 child: Text(
                   item,
                   style: GoogleFonts.inter(
                     fontSize: 12,
-                    fontWeight: isSelected ? FontWeight.w400 : FontWeight.w200,
-                    color: isSelected ? Colors.greenAccent : Colors.white60,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                    color: isSelected
+                        ? const Color(0xFF10B981)
+                        : Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withValues(alpha: 0.7),
                   ),
                 ),
               ),
