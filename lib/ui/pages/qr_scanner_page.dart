@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../providers/guest_provider.dart';
+import 'dashboard_page.dart';
 
 class QRScannerPage extends ConsumerStatefulWidget {
   const QRScannerPage({super.key});
@@ -151,7 +152,14 @@ class _QRScannerPageState extends ConsumerState<QRScannerPage> {
             backgroundColor: Colors.green,
           ),
         );
-        Navigator.pop(context);
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                const DashboardPage(initialMode: DashboardMode.guests),
+          ),
+          (route) => false,
+        );
       }
     } catch (e) {
       if (mounted) {

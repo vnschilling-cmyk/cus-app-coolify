@@ -53,13 +53,19 @@ class Guest {
     };
   }
 
-  Guest copyWith({bool? attended}) {
+  Guest copyWith({
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? company,
+    bool? attended,
+  }) {
     return Guest(
       id: id,
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      company: company,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
+      company: company ?? this.company,
       attended: attended ?? this.attended,
       qrCode: qrCode,
     );

@@ -73,4 +73,12 @@ class PocketBaseService {
       'force_password_change': false,
     });
   }
+
+  Future<void> updateGuest(Guest guest) async {
+    await pb.collection('guests').update(guest.id, body: guest.toJson());
+  }
+
+  Future<void> deleteGuest(String id) async {
+    await pb.collection('guests').delete(id);
+  }
 }

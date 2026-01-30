@@ -12,10 +12,15 @@ import 'lead_form_page.dart';
 import 'qr_scanner_page.dart';
 import 'lead_list_page.dart';
 import 'guest_list_page.dart';
+import '../../providers/guest_provider.dart';
+import '../../models/guest.dart';
 import 'settings_page.dart';
 
+enum DashboardMode { leads, guests }
+
 class DashboardPage extends ConsumerStatefulWidget {
-  const DashboardPage({super.key});
+  final DashboardMode initialMode;
+  const DashboardPage({super.key, this.initialMode = DashboardMode.leads});
 
   @override
   ConsumerState<DashboardPage> createState() => _DashboardPageState();
@@ -25,10 +30,18 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
   String? _selectedEventId;
   int? _selectedYear;
   bool _showAbsoluteNumbers = false;
+  late DashboardMode _currentMode;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentMode = widget.initialMode;
+  }
 
   @override
   Widget build(BuildContext context) {
     final leadsAsync = ref.watch(leadListProvider);
+    final guestsAsync = ref.watch(guestListProvider);
     final events = ref.watch(eventProvider);
 
     // AnnotatedRegion removed, using AppBar systemOverlayStyle instead
@@ -67,22 +80,30 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
         ],
       ),
       body: leadsAsync.when(
-        data: (leads) => Column(
-          children: [
-            Expanded(child: _buildContent(leads, events)),
-            _buildBottomNavigation(context),
-          ],
+        data: (leads) => guestsAsync.when(
+          data: (guests) => Column(
+            children: [
+              Expanded(child: _buildContent(leads, events, guests)),
+              _buildBottomNavigation(context),
+            ],
+          ),
+          loading: () =>
+              const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+          error: (err, stack) => Center(child: Text('Fehler (Gäste): $err')),
         ),
         loading: () =>
             const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-        error: (err, stack) => Center(child: Text('Fehler: $err')),
+        error: (err, stack) => Center(child: Text('Fehler (Leads): $err')),
       ),
     );
   }
 
-// ... content ...
+  Widget _buildContent(
+      List<Lead> leads, List<Event> events, List<Guest> guests) {
+    if (_currentMode == DashboardMode.guests) {
+      return _buildGuestContent(guests);
+    }
 
-  Widget _buildContent(List<Lead> leads, List<Event> events) {
     final filteredLeads = leads.where((l) {
       bool matchEvent =
           _selectedEventId == null || l.eventId == _selectedEventId;
@@ -97,6 +118,8 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              _buildModeToggle(),
+              const SizedBox(height: 16),
               _buildFilters(events, leads),
               const SizedBox(height: 16),
               _buildSummaryCards(filteredLeads),
@@ -113,6 +136,154 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildGuestContent(List<Guest> guests) {
+    final attendedCount = guests.where((g) => g.attended).length;
+    final totalCount = guests.length;
+    final openCount = totalCount - attendedCount;
+    final attendanceRate = totalCount > 0
+        ? (attendedCount / totalCount * 100).toStringAsFixed(1)
+        : '0';
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildModeToggle(),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  _buildStatCard(
+                    context,
+                    title: 'ANMELDUNGEN',
+                    value: totalCount.toString(),
+                    icon: Icons.mark_email_read_rounded,
+                    color: Colors.blueAccent,
+                  ),
+                  const SizedBox(width: 12),
+                  _buildStatCard(
+                    context,
+                    title: 'ANWESEND',
+                    value: attendedCount.toString(),
+                    icon: Icons.verified_user_rounded,
+                    color: Colors.greenAccent,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              _buildStatCard(
+                context,
+                title: 'QUOTE',
+                value: '$attendanceRate%',
+                icon: Icons.pie_chart_rounded,
+                color: Colors.purpleAccent,
+              ),
+              const SizedBox(height: 32),
+              Center(child: _buildSectionTitle('CHECK-IN STATUS')),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Center(
+            child: SizedBox(
+              height: 300,
+              child: PieChart(
+                PieChartData(
+                  sectionsSpace: 2,
+                  centerSpaceRadius: 40,
+                  sections: [
+                    PieChartSectionData(
+                      color: Colors.greenAccent,
+                      value: attendedCount.toDouble(),
+                      title: '$attendedCount',
+                      radius: 60,
+                      titleStyle: GoogleFonts.inter(
+                          fontWeight: FontWeight.bold, color: Colors.black54),
+                    ),
+                    PieChartSectionData(
+                      color: Colors.white10,
+                      value: openCount.toDouble(),
+                      title: '$openCount',
+                      radius: 50,
+                      titleStyle: GoogleFonts.inter(
+                          fontWeight: FontWeight.bold, color: Colors.white54),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildModeToggle() {
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: Colors.black.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: () => setState(() => _currentMode = DashboardMode.leads),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  color: _currentMode == DashboardMode.leads
+                      ? const Color(0xFF6366F1)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Text(
+                    'LEADS',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: GestureDetector(
+              onTap: () => setState(() => _currentMode = DashboardMode.guests),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  color: _currentMode == DashboardMode.guests
+                      ? const Color(0xFF10B981)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Text(
+                    'GÄSTE',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
