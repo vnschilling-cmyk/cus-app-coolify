@@ -1,0 +1,175 @@
+[
+    {
+        "name": "leads",
+        "type": "base",
+        "system": false,
+        "schema": [
+            {
+                "name": "name",
+                "type": "text",
+                "required": true,
+                "presentable": true
+            },
+            {
+                "name": "company",
+                "type": "text",
+                "required": true,
+                "presentable": true
+            },
+            {
+                "name": "country",
+                "type": "text",
+                "required": false
+            },
+            {
+                "name": "client_type",
+                "type": "select",
+                "required": true,
+                "options": {
+                    "maxSelect": 1,
+                    "values": [
+                        "Betreiber/Endkunde",
+                        "Selbständige Kaufleute",
+                        "KAB",
+                        "Planer/Berater",
+                        "Hersteller/OEM",
+                        "Lieferant",
+                        "Wettbewerber",
+                        "Sonstige"
+                    ]
+                }
+            },
+            {
+                "name": "waterloop_advantages",
+                "type": "text",
+                "required": false
+            },
+            {
+                "name": "waterloop_concerns",
+                "type": "text",
+                "required": false
+            },
+            {
+                "name": "regulation_handling",
+                "type": "text",
+                "required": false
+            },
+            {
+                "name": "regulation_positive_feedback",
+                "type": "text",
+                "required": false
+            },
+            {
+                "name": "regulation_criticism_wishes",
+                "type": "text",
+                "required": false
+            },
+            {
+                "name": "cooling_tech_feedback",
+                "type": "text",
+                "required": false
+            },
+            {
+                "name": "cooling_tech_advantages",
+                "type": "text",
+                "required": false
+            },
+            {
+                "name": "cooling_tech_followup",
+                "type": "text",
+                "required": false
+            },
+            {
+                "name": "energy_efficiency_priority",
+                "type": "select",
+                "required": false,
+                "options": {
+                    "maxSelect": 1,
+                    "values": [
+                        "Sehr wichtig",
+                        "Wichtig",
+                        "Weniger wichtig",
+                        "Keine Priorität"
+                    ]
+                }
+            },
+            {
+                "name": "energy_efficiency_comment",
+                "type": "text",
+                "required": false
+            },
+            {
+                "name": "project_chance",
+                "type": "text",
+                "required": false
+            },
+            {
+                "name": "follow_up",
+                "type": "text",
+                "required": false
+            },
+            {
+                "name": "responsible",
+                "type": "relation",
+                "required": false,
+                "options": {
+                    "collectionId": "_pb_users_auth_",
+                    "cascadeDelete": false,
+                    "minSelect": null,
+                    "maxSelect": 1,
+                    "displayFields": null
+                }
+            }
+        ],
+        "indexes": [],
+        "listRule": "@request.auth.id != ''",
+        "viewRule": "@request.auth.id != ''",
+        "createRule": "@request.auth.id != ''",
+        "updateRule": "@request.auth.id != ''",
+        "deleteRule": "@request.auth.id != ''",
+        "options": {}
+    },
+    {
+        "name": "guests",
+        "type": "base",
+        "system": false,
+        "schema": [
+            {
+                "name": "name",
+                "type": "text",
+                "required": true,
+                "presentable": true
+            },
+            {
+                "name": "company",
+                "type": "text",
+                "required": false,
+                "presentable": true
+            },
+            {
+                "name": "attended",
+                "type": "bool",
+                "required": false
+            },
+            {
+                "name": "qr_code",
+                "type": "text",
+                "required": true,
+                "options": {
+                    "min": null,
+                    "max": null,
+                    "pattern": ""
+                }
+            }
+        ],
+        "indexes": [
+            "CREATE UNIQUE INDEX `idx_qr_code` ON `guests` (`qr_code`)"
+        ],
+        "listRule": "@request.auth.id != ''",
+        "viewRule": "@request.auth.id != ''",
+        "createRule": "@request.auth.id != ''",
+        "updateRule": "@request.auth.id != ''",
+        "deleteRule": "@request.auth.id != ''",
+        "options": {}
+    }
+]

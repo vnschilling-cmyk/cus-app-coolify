@@ -1,0 +1,118 @@
+[
+    {
+        "name": "leads",
+        "type": "base",
+        "schema": [
+            {
+                "name": "name",
+                "type": "text",
+                "required": true
+            },
+            {
+                "name": "company",
+                "type": "text",
+                "required": true
+            },
+            {
+                "name": "country",
+                "type": "text"
+            },
+            {
+                "name": "client_type",
+                "type": "select",
+                "options": {
+                    "values": [
+                        "Betreiber/Endkunde",
+                        "Selbständige Kaufleute",
+                        "KAB",
+                        "Planer/Berater",
+                        "Hersteller/OEM",
+                        "Lieferant",
+                        "Wettbewerber",
+                        "Sonstige"
+                    ]
+                }
+            },
+            {
+                "name": "waterloop_advantages",
+                "type": "text"
+            },
+            {
+                "name": "waterloop_concerns",
+                "type": "text"
+            },
+            {
+                "name": "regulation_handling",
+                "type": "text"
+            },
+            {
+                "name": "regulation_positive_feedback",
+                "type": "text"
+            },
+            {
+                "name": "regulation_criticism_wishes",
+                "type": "text"
+            },
+            {
+                "name": "cooling_tech_feedback",
+                "type": "text"
+            },
+            {
+                "name": "cooling_tech_advantages",
+                "type": "text"
+            },
+            {
+                "name": "cooling_tech_followup",
+                "type": "text"
+            },
+            {
+                "name": "energy_efficiency_priority",
+                "type": "select",
+                "options": {
+                    "values": [
+                        "Sehr wichtig",
+                        "Wichtig",
+                        "Weniger wichtig",
+                        "Keine Priorität"
+                    ]
+                }
+            },
+            {
+                "name": "energy_efficiency_comment",
+                "type": "text"
+            },
+            {
+                "name": "project_chance",
+                "type": "text"
+            },
+            {
+                "name": "follow_up",
+                "type": "text"
+            }
+        ]
+    },
+    {
+        "name": "guests",
+        "type": "base",
+        "schema": [
+            {
+                "name": "name",
+                "type": "text",
+                "required": true
+            },
+            {
+                "name": "company",
+                "type": "text"
+            },
+            {
+                "name": "attended",
+                "type": "bool"
+            },
+            {
+                "name": "qr_code",
+                "type": "text",
+                "required": true
+            }
+        ]
+    }
+]
