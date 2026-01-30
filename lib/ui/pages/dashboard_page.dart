@@ -228,7 +228,6 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           child: _buildNavButton(
             context,
             icon: Icons.person_add_outlined,
-            label: 'Neuer Lead',
             color: const Color(0xFF6366F1),
             onTap: () => Navigator.push(
               context,
@@ -241,7 +240,6 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           child: _buildNavButton(
             context,
             icon: Icons.qr_code_scanner_rounded,
-            label: 'Scan',
             color: const Color(0xFF10B981),
             onTap: () => Navigator.push(
               context,
@@ -254,7 +252,6 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           child: _buildNavButton(
             context,
             icon: Icons.layers_outlined,
-            label: 'Listen',
             color: const Color(0xFFF59E0B),
             onTap: () => _showArchiveBottomSheet(context),
           ),
@@ -264,7 +261,6 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           child: _buildNavButton(
             context,
             icon: Icons.settings_outlined,
-            label: 'Optionen',
             color: Colors.grey,
             onTap: () => Navigator.push(
               context,
@@ -279,7 +275,6 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
   Widget _buildNavButton(
     BuildContext context, {
     required IconData icon,
-    required String label,
     required Color color,
     required VoidCallback onTap,
   }) {
@@ -290,7 +285,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
-        height: 80, // Increased height for label
+        height: 64, // Reduced height as label is removed
         decoration: BoxDecoration(
           color: theme.cardTheme.color,
           borderRadius: BorderRadius.circular(16),
@@ -308,23 +303,8 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                   )
                 ],
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: color, size: 26),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              style: GoogleFonts.inter(
-                fontSize: 10,
-                fontWeight: FontWeight.w600,
-                color: isDark ? Colors.white70 : Colors.black87,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
+        child: Center(
+          child: Icon(icon, color: color, size: 28),
         ),
       ),
     );
