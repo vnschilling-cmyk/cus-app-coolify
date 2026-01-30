@@ -35,4 +35,12 @@ class LeadListNotifier extends AsyncNotifier<List<Lead>> {
       return _fetchLeads();
     });
   }
+
+  Future<void> updateLead(Lead lead) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await _pbService.updateLead(lead);
+      return _fetchLeads();
+    });
+  }
 }

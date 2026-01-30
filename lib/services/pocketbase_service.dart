@@ -43,6 +43,10 @@ class PocketBaseService {
     await pb.collection('leads').create(body: lead.toJson());
   }
 
+  Future<void> updateLead(Lead lead) async {
+    await pb.collection('leads').update(lead.id, body: lead.toJson());
+  }
+
   Future<List<Guest>> fetchGuests() async {
     final records = await pb.collection('guests').getFullList();
     return records.map((record) => Guest.fromJson(record.toJson())).toList();

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../providers/lead_provider.dart';
 import '../../models/lead.dart';
+import 'lead_form_page.dart';
 
 class LeadListPage extends ConsumerStatefulWidget {
   const LeadListPage({super.key});
@@ -133,116 +134,130 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
     final Color subTextColor = isDark ? Colors.white70 : Colors.black87;
     final Color borderColor = isDark ? Colors.white10 : Colors.black12;
 
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: borderColor),
-        boxShadow: isDark
-            ? []
-            : [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: isDark
-                      ? const Color(0xFF334155)
-                      : const Color(0xFFE0E7FF),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  Icons.business_outlined,
-                  color: isDark ? Colors.white : const Color(0xFF4F46E5),
-                  size: 18,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      lead.company.toUpperCase(),
-                      style: GoogleFonts.inter(
-                        fontSize: 13, // Slightly larger
-                        fontWeight: FontWeight.bold, // Bolder
-                        letterSpacing: 1,
-                        color: textColor, // Explicit color
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      lead.name,
-                      style: GoogleFonts.inter(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: subTextColor, // Explicit color
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: isDark
-                      ? Colors.white10
-                      : Colors.black.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  lead.clientType,
-                  style: GoogleFonts.inter(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    color: subTextColor,
-                  ),
-                ),
-              ),
-            ],
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LeadFormPage(lead: lead),
           ),
-          if (lead.projectChance != null && lead.projectChance!.isNotEmpty) ...[
-            const SizedBox(height: 16),
-            Divider(
-              height: 1,
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
-            ),
-            const SizedBox(height: 16),
+        );
+      },
+      borderRadius: BorderRadius.circular(24),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: borderColor),
+          boxShadow: isDark
+              ? []
+              : [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Row(
               children: [
-                const Icon(
-                  Icons.lightbulb_outline,
-                  size: 14,
-                  color: Colors.amber, // Darker amber for better visibility
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: isDark
+                        ? const Color(0xFF334155)
+                        : const Color(0xFFE0E7FF),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.business_outlined,
+                    color: isDark ? Colors.white : const Color(0xFF4F46E5),
+                    size: 18,
+                  ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 16),
                 Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        lead.company.toUpperCase(),
+                        style: GoogleFonts.inter(
+                          fontSize: 13, // Slightly larger
+                          fontWeight: FontWeight.bold, // Bolder
+                          letterSpacing: 1,
+                          color: textColor, // Explicit color
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        lead.name,
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: subTextColor, // Explicit color
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: isDark
+                        ? Colors.white10
+                        : Colors.black.withValues(alpha: 0.05),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   child: Text(
-                    lead.projectChance!,
+                    lead.clientType,
                     style: GoogleFonts.inter(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                      fontStyle: FontStyle.italic,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                      color: subTextColor,
                     ),
                   ),
                 ),
               ],
             ),
+            if (lead.projectChance != null &&
+                lead.projectChance!.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              Divider(
+                height: 1,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.lightbulb_outline,
+                    size: 14,
+                    color: Colors.amber, // Darker amber for better visibility
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      lead.projectChance!,
+                      style: GoogleFonts.inter(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color:
+                            theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }

@@ -10,7 +10,9 @@ import '../../services/ocr_service.dart';
 import '../widgets/custom_text_field.dart';
 
 class LeadFormPage extends ConsumerStatefulWidget {
-  const LeadFormPage({super.key});
+  final Lead? lead;
+
+  const LeadFormPage({super.key, this.lead});
 
   @override
   ConsumerState<LeadFormPage> createState() => _LeadFormPageState();
@@ -59,13 +61,35 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
   @override
   void initState() {
     super.initState();
-    // Default to first event if available
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final events = ref.read(eventProvider);
-      if (events.isNotEmpty) {
-        setState(() => _selectedEventId = events.first.id);
-      }
-    });
+    if (widget.lead != null) {
+      final l = widget.lead!;
+      _nameController.text = l.name;
+      _companyController.text = l.company;
+      _countryController.text = l.country ?? '';
+      _clientType = l.clientType;
+      _selectedEventId = l.eventId;
+      _selectedYear = l.year ?? DateTime.now().year;
+      _waterloopAdvantagesController.text = l.waterloopAdvantages ?? '';
+      _waterloopConcernsController.text = l.waterloopConcerns ?? '';
+      _regulationHandlingController.text = l.regulationHandling ?? '';
+      _regulationPositiveController.text = l.regulationPositiveFeedback ?? '';
+      _regulationWishesController.text = l.regulationCriticismWishes ?? '';
+      _coolingFeedbackController.text = l.coolingTechFeedback ?? '';
+      _coolingAdvantagesController.text = l.coolingTechAdvantages ?? '';
+      _coolingFollowupController.text = l.coolingTechFollowup ?? '';
+      _energyPriority = l.energyEfficiencyPriority ?? 'Wichtig';
+      _energyCommentController.text = l.energyEfficiencyComment ?? '';
+      _projectChanceController.text = l.projectChance ?? '';
+      _followUpController.text = l.followUp ?? '';
+    } else {
+      // Default to first event if available for new lead
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final events = ref.read(eventProvider);
+        if (events.isNotEmpty) {
+          setState(() => _selectedEventId = events.first.id);
+        }
+      });
+    }
   }
 
   final List<String> _energyPriorities = [
@@ -349,19 +373,26 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
             ),
           ),
         ),
-        DropdownButtonFormField<T>(
-          isExpanded: true,
-          value:
-              value, // Use value instead of initialValue for better state control
-          items: items,
-          onChanged: onChanged,
-          decoration: const InputDecoration(),
-          dropdownColor: Theme.of(context).brightness == Brightness.dark
-              ? const Color(0xFF1E293B)
-              : Colors.white,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontWeight: FontWeight.w400,
+        Theme(
+          data: Theme.of(context).copyWith(
+            canvasColor: Theme.of(context).brightness == Brightness.dark
+                ? const Color(0xFF1E293B)
+                : Colors.white,
+          ),
+          child: DropdownButtonFormField<T>(
+            isExpanded: true,
+            value: value,
+            items: items,
+            onChanged: onChanged,
+            decoration: const InputDecoration(),
+            dropdownColor: Theme.of(context).brightness == Brightness.dark
+                ? const Color(0xFF1E293B)
+                : Colors.white,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+            ),
           ),
         ),
       ],
@@ -498,7 +529,7 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
   void _saveLead() async {
     if (_formKey.currentState!.validate()) {
       final lead = Lead(
-        id: '', // Pocketbase handles this
+        id: widget.lead?.id ?? '', // Keep ID if editing
         name: _nameController.text,
         company: _companyController.text,
         country: _countryController.text,
@@ -521,7 +552,11 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
       );
 
       try {
-        await ref.read(leadListProvider.notifier).addLead(lead);
+        if (widget.lead != null) {
+          await ref.read(leadListProvider.notifier).updateLead(lead);
+        } else {
+          await ref.read(leadListProvider.notifier).addLead(lead);
+        }
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
