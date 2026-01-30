@@ -373,26 +373,16 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
             ),
           ),
         ),
-        Theme(
-          data: Theme.of(context).copyWith(
-            canvasColor: Theme.of(context).brightness == Brightness.dark
-                ? const Color(0xFF1E293B)
-                : Colors.white,
-          ),
-          child: DropdownButtonFormField<T>(
-            isExpanded: true,
-            value: value,
-            items: items,
-            onChanged: onChanged,
-            decoration: const InputDecoration(),
-            dropdownColor: Theme.of(context).brightness == Brightness.dark
-                ? const Color(0xFF1E293B)
-                : Colors.white,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface,
-              fontWeight: FontWeight.w400,
-              fontSize: 14,
-            ),
+        DropdownButtonFormField<T>(
+          isExpanded: true,
+          value: value,
+          items: items,
+          onChanged: onChanged,
+          decoration: const InputDecoration(),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontWeight: FontWeight.w400,
+            fontSize: 14,
           ),
         ),
       ],
@@ -414,9 +404,7 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
                 child: Text(e,
                     style: TextStyle(
                       fontWeight: FontWeight.w500, // Bolder
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Colors.black87,
+                      color: Theme.of(context).colorScheme.onSurface,
                     )),
               ))
           .toList(),

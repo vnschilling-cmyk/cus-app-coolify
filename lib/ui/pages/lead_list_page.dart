@@ -31,10 +31,13 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.refresh_rounded,
               size: 20,
-              color: Colors.white38,
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.3),
             ),
             onPressed: () => ref.read(leadListProvider.notifier).refreshLeads(),
           ),
@@ -83,7 +86,10 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
                       'Keine Berichte gefunden',
                       style: GoogleFonts.inter(
                         fontWeight: FontWeight.w200,
-                        color: Colors.white38,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withValues(alpha: 0.4),
                       ),
                     ),
                   );
@@ -111,7 +117,10 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
                   'Fehler beim Laden',
                   style: GoogleFonts.inter(
                     fontWeight: FontWeight.w200,
-                    color: Colors.white38,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.4),
                   ),
                 ),
               ),

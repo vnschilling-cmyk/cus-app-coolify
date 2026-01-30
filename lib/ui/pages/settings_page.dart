@@ -136,11 +136,17 @@ class SettingsPage extends ConsumerWidget {
                 'Importieren Sie Leads aus früheren Veranstaltungen',
                 style: GoogleFonts.inter(
                   fontSize: 12,
-                  color: Colors.white38,
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.4),
                 ),
               ),
-              trailing: const Icon(Icons.chevron_right_rounded,
-                  color: Colors.white24),
+              trailing: Icon(Icons.chevron_right_rounded,
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.2)),
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               shape: RoundedRectangleBorder(

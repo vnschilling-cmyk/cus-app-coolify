@@ -21,6 +21,18 @@ class AppTheme {
       onSurface: Color(0xFF1E293B), // Slate 800
     ),
 
+    // Explicitly define menu colors
+    dropdownMenuTheme: const DropdownMenuThemeData(
+      menuStyle: MenuStyle(
+        backgroundColor: WidgetStatePropertyAll(Colors.white),
+      ),
+    ),
+    popupMenuTheme: const PopupMenuThemeData(
+      color: Colors.white,
+      surfaceTintColor: Colors.white,
+      elevation: 8,
+    ),
+
     // Modern Typography with Thin Fonts (Light Mode)
     textTheme: GoogleFonts.interTextTheme(
       const TextTheme(
@@ -129,6 +141,19 @@ class AppTheme {
       secondary: secondaryColor,
       surface: surfaceColor,
       onSurface: Colors.white,
+    ),
+    canvasColor: surfaceColor,
+
+    // Explicitly define menu colors
+    dropdownMenuTheme: const DropdownMenuThemeData(
+      menuStyle: MenuStyle(
+        backgroundColor: WidgetStatePropertyAll(surfaceColor),
+      ),
+    ),
+    popupMenuTheme: const PopupMenuThemeData(
+      color: surfaceColor,
+      surfaceTintColor: surfaceColor,
+      elevation: 8,
     ),
     textTheme: GoogleFonts.interTextTheme(
       const TextTheme(
