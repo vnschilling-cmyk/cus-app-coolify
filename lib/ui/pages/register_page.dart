@@ -54,6 +54,18 @@ class _RegisterPageState extends State<RegisterPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Center(
+            child: Image.asset(
+              'assets/logo.png',
+              height: 100,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) => const Icon(
+                  Icons.business_rounded,
+                  size: 80,
+                  color: Colors.white24),
+            ),
+          ),
+          const SizedBox(height: 32),
           _buildHeader('GÄSTE-REGISTRIERUNG', 'BITTE DATEN EINGEBEN'),
           const SizedBox(height: 48),
           Row(
