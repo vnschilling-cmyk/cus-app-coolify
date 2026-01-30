@@ -70,6 +70,40 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
 
 // ... content ...
 
+  Widget _buildContent(List<Lead> leads, List<Event> events) {
+    final filteredLeads = leads.where((l) {
+      bool matchEvent =
+          _selectedEventId == null || l.eventId == _selectedEventId;
+      bool matchYear = _selectedYear == null || l.year == _selectedYear;
+      return matchEvent && matchYear;
+    }).toList();
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildFilters(events, leads),
+              const SizedBox(height: 16),
+              _buildSummaryCards(filteredLeads),
+              const SizedBox(height: 16),
+              _buildFacts(filteredLeads, events),
+              const SizedBox(height: 20),
+              Center(child: _buildSectionTitle('KUNDENSTRUKTUR')),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Center(
+            child: _buildPieChart(filteredLeads),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildPieChart(List<Lead> leads) {
     if (leads.isEmpty) {
       return const Center(

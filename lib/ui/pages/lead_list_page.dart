@@ -125,6 +125,10 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
   Widget _buildLeadCard(Lead lead) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    // Explicitly define text text color based on brightness to ensure contrast
+    final Color textColor = isDark ? Colors.white : const Color(0xFF1E293B);
+    final Color subTextColor =
+        isDark ? Colors.white70 : const Color(0xFF334155);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -132,7 +136,7 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
         color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: theme.colorScheme.onSurface.withValues(alpha: 0.05),
+          color: textColor.withValues(alpha: 0.1),
         ),
       ),
       child: Column(
@@ -160,19 +164,19 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
                     Text(
                       lead.company.toUpperCase(),
                       style: GoogleFonts.inter(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600, // Increased weight
+                        fontSize: 13, // Slightly larger
+                        fontWeight: FontWeight.bold, // Bolder
                         letterSpacing: 1,
-                        color: theme.colorScheme.onSurface, // Theme aware
+                        color: textColor, // Explicit color
                       ),
                     ),
+                    const SizedBox(height: 4),
                     Text(
                       lead.name,
                       style: GoogleFonts.inter(
                         fontSize: 14,
-                        fontWeight: FontWeight.w400, // Increased weight
-                        color: theme.colorScheme.onSurface
-                            .withValues(alpha: 0.7), // Theme aware
+                        fontWeight: FontWeight.w500,
+                        color: subTextColor, // Explicit color
                       ),
                     ),
                   ],
@@ -181,15 +185,15 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.05),
+                  color: textColor.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   lead.clientType,
                   style: GoogleFonts.inter(
                     fontSize: 10,
-                    fontWeight: FontWeight.w500,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                    fontWeight: FontWeight.w600,
+                    color: subTextColor,
                   ),
                 ),
               ),
