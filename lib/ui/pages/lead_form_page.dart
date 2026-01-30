@@ -351,11 +351,18 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
         ),
         DropdownButtonFormField<T>(
           isExpanded: true,
-          initialValue: value,
+          value:
+              value, // Use value instead of initialValue for better state control
           items: items,
           onChanged: onChanged,
           decoration: const InputDecoration(),
-          dropdownColor: const Color(0xFF1E293B),
+          dropdownColor: Theme.of(context).brightness == Brightness.dark
+              ? const Color(0xFF1E293B)
+              : Colors.white,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontWeight: FontWeight.w400,
+          ),
         ),
       ],
     );
@@ -369,12 +376,17 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
   }) {
     return _buildGenericDropdown<String>(
       label: label,
-      value: initialValue,
+      value: initialValue.isEmpty ? null : initialValue, // Handle empty init
       items: items
           .map((e) => DropdownMenuItem(
                 value: e,
                 child: Text(e,
-                    style: const TextStyle(fontWeight: FontWeight.w200)),
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500, // Bolder
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black87,
+                    )),
               ))
           .toList(),
       onChanged: onChanged,
