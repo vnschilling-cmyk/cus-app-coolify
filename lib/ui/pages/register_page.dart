@@ -76,11 +76,11 @@ class _RegisterPageState extends State<RegisterPage> {
           Center(
             child: Image.asset(
               'assets/login_logo_dark.png',
-              height: 100,
+              height: 140,
               fit: BoxFit.contain,
               errorBuilder: (context, error, stackTrace) => const Icon(
                   Icons.business_rounded,
-                  size: 80,
+                  size: 140,
                   color: Colors.white24),
             ),
           ),
