@@ -50,6 +50,15 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           ),
         ),
         actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Image.asset(
+              'assets/logo.png',
+              height: 28,
+              errorBuilder: (context, error, stackTrace) =>
+                  const SizedBox.shrink(),
+            ),
+          ),
           IconButton(
             icon: const Icon(Icons.logout_rounded, color: Colors.white24),
             onPressed: () => ref.read(authProvider.notifier).logout(),

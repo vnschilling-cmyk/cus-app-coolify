@@ -51,19 +51,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     // Logo or Icon
                     Center(
                       child: Container(
-                        padding: const EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          color: Colors.indigoAccent.withValues(alpha: 0.1),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.indigoAccent.withValues(alpha: 0.2),
-                            width: 2,
+                        padding: const EdgeInsets.all(4), // Container for logo
+                        child: Hero(
+                          tag: 'logo',
+                          child: Image.asset(
+                            'assets/logo.png',
+                            height: 140,
+                            fit: BoxFit.contain,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(Icons.business_rounded,
+                                    size: 140, color: Colors.white24),
                           ),
-                        ),
-                        child: const Icon(
-                          Icons.lock_person_outlined,
-                          size: 48,
-                          color: Colors.indigoAccent,
                         ),
                       ),
                     ),
