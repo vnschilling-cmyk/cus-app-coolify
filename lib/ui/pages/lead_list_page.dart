@@ -45,13 +45,25 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
             padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
             child: TextFormField(
               onChanged: (v) => setState(() => _searchQuery = v.toLowerCase()),
-              style: const TextStyle(fontWeight: FontWeight.w200),
+              style: TextStyle(
+                fontWeight: FontWeight.w400, // Slightly bolder
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
               decoration: InputDecoration(
                 hintText: 'Nach Firma oder Name suchen...',
+                hintStyle: TextStyle(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.4),
+                ),
                 prefixIcon: Icon(
                   Icons.search_rounded,
                   size: 20,
-                  color: Colors.white.withValues(alpha: 0.3),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.4),
                 ),
               ),
             ),
@@ -111,12 +123,17 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
   }
 
   Widget _buildLeadCard(Lead lead) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.02),
+        color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+        border: Border.all(
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.05),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,12 +143,12 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Colors.indigoAccent.withValues(alpha: 0.1),
+                  color: theme.primaryColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.business_outlined,
-                  color: Colors.indigoAccent,
+                  color: theme.primaryColor,
                   size: 18,
                 ),
               ),
@@ -144,17 +161,18 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
                       lead.company.toUpperCase(),
                       style: GoogleFonts.inter(
                         fontSize: 12,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600, // Increased weight
                         letterSpacing: 1,
-                        color: Colors.white,
+                        color: theme.colorScheme.onSurface, // Theme aware
                       ),
                     ),
                     Text(
                       lead.name,
                       style: GoogleFonts.inter(
                         fontSize: 14,
-                        fontWeight: FontWeight.w200,
-                        color: Colors.white60,
+                        fontWeight: FontWeight.w400, // Increased weight
+                        color: theme.colorScheme.onSurface
+                            .withValues(alpha: 0.7), // Theme aware
                       ),
                     ),
                   ],
@@ -163,15 +181,15 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.05),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   lead.clientType,
                   style: GoogleFonts.inter(
                     fontSize: 10,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.white38,
+                    fontWeight: FontWeight.w500,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                   ),
                 ),
               ),
@@ -179,14 +197,17 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
           ),
           if (lead.projectChance != null && lead.projectChance!.isNotEmpty) ...[
             const SizedBox(height: 16),
-            const Divider(height: 1, color: Colors.white10),
+            Divider(
+              height: 1,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+            ),
             const SizedBox(height: 16),
             Row(
               children: [
                 const Icon(
                   Icons.lightbulb_outline,
                   size: 14,
-                  color: Colors.amberAccent,
+                  color: Colors.amber, // Darker amber for better visibility
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -194,8 +215,8 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
                     lead.projectChance!,
                     style: GoogleFonts.inter(
                       fontSize: 12,
-                      fontWeight: FontWeight.w200,
-                      color: Colors.white60,
+                      fontWeight: FontWeight.w400,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       fontStyle: FontStyle.italic,
                     ),
                   ),

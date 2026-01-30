@@ -297,15 +297,15 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
         children: [
           Row(
             children: [
-              Icon(icon, color: color.withValues(alpha: 0.5), size: 18),
+              Icon(icon, color: color, size: 20), // Full color
               const SizedBox(width: 12),
               Text(
                 title,
                 style: GoogleFonts.inter(
                   fontSize: 13,
-                  fontWeight: FontWeight.w300,
-                  letterSpacing: 3,
-                  color: color,
+                  fontWeight: FontWeight.w600, // Bold
+                  letterSpacing: 2, // Slightly tighter spacing
+                  color: color, // Full color
                 ),
               ),
             ],
@@ -314,9 +314,9 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.02),
+              color: color.withValues(alpha: 0.03), // Subtle tint
               borderRadius: BorderRadius.circular(28),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+              border: Border.all(color: color.withValues(alpha: 0.1)),
             ),
             child: Column(children: children),
           ),
@@ -340,9 +340,12 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
             label,
             style: GoogleFonts.inter(
               fontSize: 11,
-              fontWeight: FontWeight.w200,
-              letterSpacing: 2.0,
-              color: Colors.white.withValues(alpha: 0.5),
+              fontWeight: FontWeight.w600, // Bolder
+              letterSpacing: 1.5,
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.6), // Visible in light mode
             ),
           ),
         ),
@@ -393,9 +396,12 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
             label.toUpperCase(),
             style: GoogleFonts.inter(
               fontSize: 11,
-              fontWeight: FontWeight.w200,
-              letterSpacing: 2.0,
-              color: Colors.white.withValues(alpha: 0.5),
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1.5,
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.6),
             ),
           ),
         ),
