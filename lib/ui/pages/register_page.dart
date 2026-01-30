@@ -85,7 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           const SizedBox(height: 32),
-          _buildHeader('GÄSTE-REGISTRIERUNG', 'BITTE DATEN EINGEBEN'),
+          _buildHeader('REGISTRIERUNG', 'BITTE DATEN EINGEBEN'),
           const SizedBox(height: 48),
           LayoutBuilder(builder: (context, constraints) {
             if (constraints.maxWidth > 400) {
@@ -150,6 +150,7 @@ class _RegisterPageState extends State<RegisterPage> {
             textInputAction: TextInputAction.done,
             validator: (v) => v?.isEmpty == true ? 'Pflichtfeld' : null,
           ),
+          const SizedBox(height: 48),
           _isSubmitting
               ? const Center(
                   child: CircularProgressIndicator(color: Color(0xFF3BC0C3)))
