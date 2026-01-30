@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -23,41 +24,48 @@ class DashboardPage extends ConsumerStatefulWidget {
 class _DashboardPageState extends ConsumerState<DashboardPage> {
   String? _selectedEventId;
   int? _selectedYear;
+  bool _showAbsoluteNumbers = false;
 
   @override
   Widget build(BuildContext context) {
     final leadsAsync = ref.watch(leadListProvider);
     final events = ref.watch(eventProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading:
-            false, // Hide back button since it's now Home
-        title: Text(
-          'Messe Connect',
-          style: GoogleFonts.outfit(
-            fontWeight: FontWeight.w100,
-            fontSize: 32,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout_rounded, color: Colors.white24),
-            onPressed: () => ref.read(authProvider.notifier).logout(),
-            tooltip: 'Abmelden',
-          ),
-        ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
       ),
-      body: leadsAsync.when(
-        data: (leads) => Column(
-          children: [
-            Expanded(child: _buildContent(leads, events)),
-            _buildBottomNavigation(context),
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading:
+              false, // Hide back button since it's now Home
+          title: Text(
+            'MConnect',
+            style: GoogleFonts.outfit(
+              fontWeight: FontWeight.w100,
+              fontSize: 32,
+            ),
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.logout_rounded, color: Colors.white24),
+              onPressed: () => ref.read(authProvider.notifier).logout(),
+              tooltip: 'Abmelden',
+            ),
           ],
         ),
-        loading: () =>
-            const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-        error: (err, stack) => Center(child: Text('Fehler: $err')),
+        body: leadsAsync.when(
+          data: (leads) => Column(
+            children: [
+              Expanded(child: _buildContent(leads, events)),
+              _buildBottomNavigation(context),
+            ],
+          ),
+          loading: () =>
+              const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+          error: (err, stack) => Center(child: Text('Fehler: $err')),
+        ),
       ),
     );
   }
@@ -124,7 +132,20 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
         PieChartData(
           sectionsSpace: 2,
           centerSpaceRadius: 40,
-          pieTouchData: PieTouchData(enabled: false),
+          pieTouchData: PieTouchData(
+            touchCallback: (FlTouchEvent event, pieTouchResponse) {
+              if (!event.isInterestedForInteractions ||
+                  pieTouchResponse == null ||
+                  pieTouchResponse.touchedSection == null) {
+                return;
+              }
+              if (event is FlTapUpEvent) {
+                setState(() {
+                  _showAbsoluteNumbers = !_showAbsoluteNumbers;
+                });
+              }
+            },
+          ),
           sections: typeCounts.entries.toList().asMap().entries.map((entry) {
             final value = entry.value;
             final percentage =
@@ -144,7 +165,9 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
             return PieChartSectionData(
               color: color,
               value: value.value.toDouble(),
-              title: '$percentage%',
+              title: _showAbsoluteNumbers
+                  ? value.value.toString()
+                  : '$percentage%',
               radius: 65, // Slightly reduced
               titlePositionPercentageOffset: 0.55, // Inside
               titleStyle: GoogleFonts.inter(
