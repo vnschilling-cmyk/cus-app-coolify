@@ -17,7 +17,12 @@ class CustomTextField extends StatelessWidget {
     this.prefixIcon,
     this.maxLines = 1,
     this.validator,
+    this.keyboardType,
+    this.textInputAction,
   });
+
+  final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +48,8 @@ class CustomTextField extends StatelessWidget {
           controller: controller,
           maxLines: maxLines,
           validator: validator,
+          keyboardType: keyboardType,
+          textInputAction: textInputAction,
           style: TextStyle(
             fontWeight: FontWeight.w400,
             color: Theme.of(context).colorScheme.onSurface,

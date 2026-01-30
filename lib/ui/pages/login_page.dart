@@ -24,18 +24,23 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
     return Scaffold(
       backgroundColor: const Color(0xFF0F172A),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
+            ),
           ),
-        ),
-        child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(32.0),
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 32.0, vertical: 48.0),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -88,6 +93,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       controller: _emailController,
                       label: 'E-Mail',
                       prefixIcon: Icons.email_outlined,
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
                       validator: (v) => v == null || !v.contains('@')
                           ? 'Ungültige E-Mail'
                           : null,
@@ -111,6 +118,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         TextFormField(
                           controller: _passwordController,
                           obscureText: !_isPasswordVisible,
+                          keyboardType: TextInputType.visiblePassword,
+                          textInputAction: TextInputAction.done,
+                          onFieldSubmitted: (_) => _handleLogin(),
                           style: const TextStyle(fontWeight: FontWeight.w200),
                           validator: (v) => v == null || v.length < 5
                               ? 'Mind. 5 Zeichen'
