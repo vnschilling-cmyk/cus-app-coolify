@@ -31,80 +31,44 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     final leadsAsync = ref.watch(leadListProvider);
     final events = ref.watch(eventProvider);
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light.copyWith(
-        statusBarColor: Colors.transparent,
-        systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
-      ),
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading:
-              false, // Hide back button since it's now Home
-          title: Text(
-            'MConnect',
-            style: GoogleFonts.outfit(
-              fontWeight: FontWeight.w100,
-              fontSize: 32,
-            ),
+    // AnnotatedRegion removed, using AppBar systemOverlayStyle instead
+    return Scaffold(
+      appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light, // White icons for dark theme
+        backgroundColor: Colors.transparent, // Ensure it melts into the background
+        elevation: 0,
+        automaticallyImplyLeading:
+            false, // Hide back button since it's now Home
+        title: Text(
+          'MConnect',
+          style: GoogleFonts.outfit(
+            fontWeight: FontWeight.w100,
+            fontSize: 32,
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.logout_rounded, color: Colors.white24),
-              onPressed: () => ref.read(authProvider.notifier).logout(),
-              tooltip: 'Abmelden',
-            ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout_rounded, color: Colors.white24),
+            onPressed: () => ref.read(authProvider.notifier).logout(),
+            tooltip: 'Abmelden',
+          ),
+        ],
+      ),
+      body: leadsAsync.when(
+        data: (leads) => Column(
+          children: [
+            Expanded(child: _buildContent(leads, events)),
+            _buildBottomNavigation(context),
           ],
         ),
-        body: leadsAsync.when(
-          data: (leads) => Column(
-            children: [
-              Expanded(child: _buildContent(leads, events)),
-              _buildBottomNavigation(context),
-            ],
-          ),
-          loading: () =>
-              const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-          error: (err, stack) => Center(child: Text('Fehler: $err')),
-        ),
+        loading: () =>
+            const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+        error: (err, stack) => Center(child: Text('Fehler: $err')),
       ),
     );
   }
 
-  Widget _buildContent(List<Lead> leads, List<Event> events) {
-    final filteredLeads = leads.where((l) {
-      bool matchEvent =
-          _selectedEventId == null || l.eventId == _selectedEventId;
-      bool matchYear = _selectedYear == null || l.year == _selectedYear;
-      return matchEvent && matchYear;
-    }).toList();
-
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _buildFilters(events, leads),
-              const SizedBox(height: 16),
-              _buildSummaryCards(filteredLeads),
-              const SizedBox(height: 16),
-              _buildFacts(filteredLeads, events),
-              const SizedBox(height: 20),
-              Center(child: _buildSectionTitle('KUNDENSTRUKTUR')),
-            ],
-          ),
-        ),
-        Expanded(
-          child: Center(
-            child: _buildPieChart(filteredLeads),
-          ),
-        ),
-      ],
-    );
-  }
-
-// ... existing code ...
+// ... content ...
 
   Widget _buildPieChart(List<Lead> leads) {
     if (leads.isEmpty) {
@@ -129,7 +93,9 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     return SizedBox(
       height: 300,
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque, // Catch all taps within the area
         onTap: () {
+          print("Pie Chart Tapped"); // Debug print
           setState(() {
             _showAbsoluteNumbers = !_showAbsoluteNumbers;
           });
@@ -138,7 +104,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           PieChartData(
             sectionsSpace: 2,
             centerSpaceRadius: 40,
-            pieTouchData: PieTouchData(enabled: false),
+            pieTouchData: PieTouchData(enabled: false), // Disable internal handling
             sections: typeCounts.entries.toList().asMap().entries.map((entry) {
               final value = entry.value;
               final percentage =
