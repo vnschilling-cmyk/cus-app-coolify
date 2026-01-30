@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/guest.dart';
 import '../../services/pocketbase_service.dart';
-import '../../services/email_service.dart';
 import '../widgets/custom_text_field.dart';
 
-class RegisterPage extends ConsumerStatefulWidget {
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
   @override
-  ConsumerState<RegisterPage> createState() => _RegisterPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends ConsumerState<RegisterPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -289,33 +287,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         );
 
         await PocketBaseService().registerGuest(guest);
-
-        // Send Email (Fire and Forget or await?) -> Better Fire and Forget for user speed, but show error if fails?
-        // Let's await to be sure, but catch errors separately so it doesn't block "Success" screen.
-        try {
-          await ref.read(emailServiceProvider).sendGuestEmail(guest);
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Bestätigungs-E-Mail wurde versendet!'),
-                backgroundColor: Colors.green,
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-          }
-        } catch (emailError) {
-          print('Email Error: $emailError');
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                    'Registriert, aber E-Mail konnte nicht gesendet werden: $emailError'),
-                backgroundColor: Colors.orange,
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-          }
-        }
 
         setState(() {
           _registeredQrCode = qrCode;

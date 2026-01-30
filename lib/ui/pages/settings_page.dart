@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../providers/theme_provider.dart';
 import '../../services/import_service.dart';
-import '../../services/email_service.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -101,63 +100,6 @@ class SettingsPage extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 32),
-          Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardTheme.color,
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onSurface
-                      .withValues(alpha: 0.05)),
-            ),
-            child: ListTile(
-              onTap: () async {
-                final emailService = ref.read(emailServiceProvider);
-                final settings = await emailService.getSettings();
-
-                if (context.mounted) {
-                  _showSmtpDialog(context, ref, settings);
-                }
-              },
-              leading: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.blueAccent.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(Icons.mail_outline_rounded,
-                    color: Colors.blueAccent),
-              ),
-              title: Text(
-                'E-Mail Konfiguration',
-                style: GoogleFonts.inter(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-              subtitle: Text(
-                'SMTP Einstellungen für den Mailversand',
-                style: GoogleFonts.inter(
-                  fontSize: 12,
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onSurface
-                      .withValues(alpha: 0.4),
-                ),
-              ),
-              trailing: Icon(Icons.chevron_right_rounded,
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onSurface
-                      .withValues(alpha: 0.2)),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24)),
-            ),
-          ),
-          const SizedBox(height: 32),
           Text(
             'DATENVERWALTUNG',
             style: GoogleFonts.inter(
@@ -252,80 +194,6 @@ class SettingsPage extends ConsumerWidget {
           : null,
       contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-    );
-  }
-
-  void _showSmtpDialog(
-      BuildContext context, WidgetRef ref, Map<String, dynamic> settings) {
-    final hostController = TextEditingController(text: settings['host']);
-    final portController =
-        TextEditingController(text: settings['port'].toString());
-    final userController = TextEditingController(text: settings['user']);
-    final passController = TextEditingController(text: settings['pass']);
-    final fromController = TextEditingController(text: settings['from']);
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('SMTP Konfiguration',
-            style: GoogleFonts.outfit(fontWeight: FontWeight.w600)),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: hostController,
-                decoration: const InputDecoration(
-                    labelText: 'SMTP Server (z.B. smtp.gmail.com)'),
-              ),
-              TextField(
-                controller: portController,
-                decoration: const InputDecoration(labelText: 'Port (z.B. 587)'),
-                keyboardType: TextInputType.number,
-              ),
-              TextField(
-                controller: userController,
-                decoration:
-                    const InputDecoration(labelText: 'Benutzername/E-Mail'),
-              ),
-              TextField(
-                controller: fromController,
-                decoration:
-                    const InputDecoration(labelText: 'Absender (Optional)'),
-              ),
-              TextField(
-                controller: passController,
-                decoration: const InputDecoration(labelText: 'Passwort'),
-                obscureText: true,
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('ABBRECHEN'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              await ref.read(emailServiceProvider).saveSettings(
-                    host: hostController.text,
-                    port: int.tryParse(portController.text) ?? 587,
-                    user: userController.text,
-                    pass: passController.text,
-                    from: fromController.text,
-                  );
-              if (context.mounted) {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Einstellungen gespeichert')),
-                );
-              }
-            },
-            child: const Text('SPEICHERN'),
-          ),
-        ],
-      ),
     );
   }
 }
