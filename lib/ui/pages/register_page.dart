@@ -25,13 +25,13 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
+      backgroundColor: const Color(0xFF334155), // TEKO Grey Bg
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
+            colors: [Color(0xFF334155), Color(0xFF1E293B)],
           ),
         ),
         child: Center(
@@ -43,11 +43,13 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Card(
                 elevation: 20,
                 shadowColor: Colors.black45,
-                color: const Color(0xFF1E293B).withValues(alpha: 0.8),
+                color: const Color(0xFF475569)
+                    .withValues(alpha: 0.9), // TEKO Grey Surface
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32),
                   side: BorderSide(
-                    color: Colors.white.withValues(alpha: 0.05),
+                    color: const Color(0xFF3BC0C3)
+                        .withValues(alpha: 0.1), // TEKO Cyan tint
                     width: 1,
                   ),
                 ),
@@ -148,15 +150,24 @@ class _RegisterPageState extends State<RegisterPage> {
             textInputAction: TextInputAction.done,
             validator: (v) => v?.isEmpty == true ? 'Pflichtfeld' : null,
           ),
-          const SizedBox(height: 48),
           _isSubmitting
-              ? const Center(child: CircularProgressIndicator())
+              ? const Center(
+                  child: CircularProgressIndicator(color: Color(0xFF3BC0C3)))
               : ElevatedButton(
                   onPressed: _handleRegister,
                   style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF3BC0C3), // TEKO Cyan
+                    foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 20),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
-                  child: const Text('KOSTENFREI REGISTRIEREN'),
+                  child: const Text(
+                    'KOSTENFREI REGISTRIEREN',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, letterSpacing: 1),
+                  ),
                 ),
           const SizedBox(height: 24),
           Text(
@@ -209,7 +220,7 @@ class _RegisterPageState extends State<RegisterPage> {
         Text(
           'Bitte zeige diesen Code am Messeeingang vor.',
           style: GoogleFonts.inter(
-            color: Colors.indigoAccent,
+            color: const Color(0xFF3BC0C3), // TEKO Cyan
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -249,7 +260,7 @@ class _RegisterPageState extends State<RegisterPage> {
             fontSize: 11,
             fontWeight: FontWeight.w400,
             letterSpacing: 3,
-            color: Colors.indigoAccent,
+            color: const Color(0xFF3BC0C3), // TEKO Cyan
           ),
         ),
       ],
