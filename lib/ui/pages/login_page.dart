@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/test_data_service.dart';
 import '../widgets/custom_text_field.dart';
-import 'register_page.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -203,25 +202,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         textStyle: GoogleFonts.inter(
                           fontSize: 9,
                           letterSpacing: 1,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const RegisterPage()),
-                        );
-                      },
-                      child: Text(
-                        'ZUR GÄSTE-REGISTRIERUNG',
-                        style: GoogleFonts.inter(
-                          color: Colors.indigoAccent.withValues(alpha: 0.5),
-                          fontSize: 11,
-                          letterSpacing: 2,
-                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),
