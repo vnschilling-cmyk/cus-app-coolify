@@ -29,12 +29,31 @@ class LeadManagementApp extends ConsumerWidget {
         uri.query.toLowerCase().contains('register') ||
         uri.fragment.toLowerCase().contains('register');
 
+    // Convert AppThemeMode to Flutter ThemeMode and specific Themes
+    ThemeMode flutterThemeMode = ThemeMode.system;
+    ThemeData? customTheme;
+
+    switch (themeMode) {
+      case AppThemeMode.light:
+        flutterThemeMode = ThemeMode.light;
+        break;
+      case AppThemeMode.dark:
+        flutterThemeMode = ThemeMode.dark;
+        break;
+      case AppThemeMode.teko:
+        flutterThemeMode = ThemeMode.dark; // Base on dark
+        customTheme = AppTheme.tekoTheme;
+        break;
+      default:
+        flutterThemeMode = ThemeMode.system;
+    }
+
     return MaterialApp(
       title: 'Messe Connect',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: themeMode,
+      darkTheme: customTheme ?? AppTheme.darkTheme,
+      themeMode: flutterThemeMode,
       routes: {
         '/register': (context) => const RegisterPage(),
       },

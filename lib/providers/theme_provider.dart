@@ -1,14 +1,15 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ThemeNotifier extends StateNotifier<ThemeMode> {
-  ThemeNotifier() : super(ThemeMode.system);
+enum AppThemeMode { system, light, dark, teko }
 
-  void setThemeMode(ThemeMode mode) {
+class ThemeNotifier extends StateNotifier<AppThemeMode> {
+  ThemeNotifier() : super(AppThemeMode.system);
+
+  void setThemeMode(AppThemeMode mode) {
     state = mode;
   }
 }
 
-final themeProvider = StateNotifierProvider<ThemeNotifier, ThemeMode>((ref) {
+final themeProvider = StateNotifierProvider<ThemeNotifier, AppThemeMode>((ref) {
   return ThemeNotifier();
 });

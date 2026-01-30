@@ -54,7 +54,7 @@ class SettingsPage extends ConsumerWidget {
                   context,
                   ref,
                   title: 'System',
-                  mode: ThemeMode.system,
+                  mode: AppThemeMode.system,
                   currentMode: themeMode,
                 ),
                 Divider(
@@ -67,7 +67,7 @@ class SettingsPage extends ConsumerWidget {
                   context,
                   ref,
                   title: 'Hell',
-                  mode: ThemeMode.light,
+                  mode: AppThemeMode.light,
                   currentMode: themeMode,
                 ),
                 Divider(
@@ -80,7 +80,20 @@ class SettingsPage extends ConsumerWidget {
                   context,
                   ref,
                   title: 'Dunkel',
-                  mode: ThemeMode.dark,
+                  mode: AppThemeMode.dark,
+                  currentMode: themeMode,
+                ),
+                Divider(
+                    height: 1,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.05)),
+                _buildThemeOption(
+                  context,
+                  ref,
+                  title: 'TEKO Stil',
+                  mode: AppThemeMode.teko,
                   currentMode: themeMode,
                 ),
               ],
@@ -162,8 +175,8 @@ class SettingsPage extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref, {
     required String title,
-    required ThemeMode mode,
-    required ThemeMode currentMode,
+    required AppThemeMode mode,
+    required AppThemeMode currentMode,
   }) {
     final isSelected = mode == currentMode;
     return ListTile(

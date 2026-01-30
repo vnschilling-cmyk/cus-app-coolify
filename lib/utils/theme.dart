@@ -8,6 +8,12 @@ class AppTheme {
   static const surfaceColor = Color(0xFF1E293B);
   static const accentColor = Color(0xFF818CF8);
 
+  // TEKO Corporate Colors
+  static const tekoCyan = Color(0xFF3BC0C3);
+  static const tekoCrimson = Color(0xFFBE123C);
+  static const tekoGreyBg = Color(0xFF334155); // Slate 700
+  static const tekoGreySurface = Color(0xFF475569); // Slate 600
+
   static final lightTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
@@ -228,6 +234,101 @@ class AppTheme {
     ),
     cardTheme: CardThemeData(
       color: surfaceColor,
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+    ),
+  );
+
+  static final tekoTheme = ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.dark,
+    primaryColor: tekoCyan,
+    scaffoldBackgroundColor: tekoGreyBg,
+    colorScheme: const ColorScheme.dark(
+      primary: tekoCyan,
+      secondary: tekoCrimson,
+      surface: tekoGreySurface,
+      onSurface: Colors.white,
+    ),
+    canvasColor: tekoGreySurface,
+    dropdownMenuTheme: DropdownMenuThemeData(
+      menuStyle: MenuStyle(
+        backgroundColor: const WidgetStatePropertyAll(tekoGreySurface),
+        elevation: const WidgetStatePropertyAll(12),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        ),
+      ),
+    ),
+    popupMenuTheme: PopupMenuThemeData(
+      color: tekoGreySurface,
+      surfaceTintColor: tekoGreySurface,
+      elevation: 12,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    ),
+    textTheme: GoogleFonts.interTextTheme(
+      const TextTheme(
+        displayLarge: TextStyle(fontWeight: FontWeight.w200, fontSize: 48),
+        displayMedium: TextStyle(fontWeight: FontWeight.w200, fontSize: 36),
+        displaySmall: TextStyle(fontWeight: FontWeight.w300, fontSize: 32),
+        headlineMedium: TextStyle(fontWeight: FontWeight.w300, fontSize: 24),
+        titleLarge: TextStyle(fontWeight: FontWeight.w300, fontSize: 22),
+        bodyLarge: TextStyle(fontWeight: FontWeight.w300, fontSize: 16),
+        bodyMedium: TextStyle(fontWeight: FontWeight.w300, fontSize: 14),
+        labelLarge: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+      ),
+    ),
+    appBarTheme: AppBarTheme(
+      backgroundColor: tekoGreyBg,
+      elevation: 0,
+      centerTitle: true,
+      titleTextStyle: GoogleFonts.inter(
+        fontWeight: FontWeight.w200,
+        fontSize: 20,
+        color: Colors.white,
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: tekoCyan,
+        foregroundColor: Colors.white,
+        minimumSize: const Size(double.infinity, 56),
+        elevation: 0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        textStyle: GoogleFonts.inter(
+          fontWeight: FontWeight.w400,
+          fontSize: 16,
+          letterSpacing: 1.1,
+        ),
+      ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: tekoGreySurface.withValues(alpha: 0.5),
+      hintStyle: GoogleFonts.inter(
+        fontWeight: FontWeight.w200,
+        color: Colors.white38,
+      ),
+      labelStyle: GoogleFonts.inter(
+        fontWeight: FontWeight.w300,
+        color: tekoCyan,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide.none,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide.none,
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: tekoCyan, width: 1),
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+    ),
+    cardTheme: CardThemeData(
+      color: tekoGreySurface,
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
     ),
