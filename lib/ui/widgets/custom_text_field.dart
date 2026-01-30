@@ -29,10 +29,13 @@ class CustomTextField extends StatelessWidget {
           child: Text(
             label.toUpperCase(),
             style: GoogleFonts.inter(
-              fontSize: 11,
-              fontWeight: FontWeight.w200,
-              letterSpacing: 2.0,
-              color: Colors.white.withValues(alpha: 0.5),
+              fontSize: 12,
+              fontWeight: FontWeight.w600, // Bolder
+              letterSpacing: 1.5,
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.7),
             ),
           ),
         ),
@@ -40,14 +43,20 @@ class CustomTextField extends StatelessWidget {
           controller: controller,
           maxLines: maxLines,
           validator: validator,
-          style: const TextStyle(fontWeight: FontWeight.w200),
+          style: TextStyle(
+            fontWeight: FontWeight.w400,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
           decoration: InputDecoration(
             hintText: hint,
             prefixIcon: prefixIcon != null
                 ? Icon(
                     prefixIcon,
                     size: 20,
-                    color: Colors.white.withValues(alpha: 0.3),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.4),
                   )
                 : null,
           ),

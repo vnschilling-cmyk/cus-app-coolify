@@ -110,27 +110,27 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
                   prefixIcon: Icons.person_outline_rounded,
                   validator: (v) => v!.isEmpty ? 'Pflichtfeld' : null,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
                 CustomTextField(
                   controller: _companyController,
                   label: 'Firma',
                   prefixIcon: Icons.business_outlined,
                   validator: (v) => v!.isEmpty ? 'Pflichtfeld' : null,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
                 CustomTextField(
                   controller: _countryController,
                   label: 'Land',
                   prefixIcon: Icons.public_outlined,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
                 _buildDropdown(
                   label: 'KUNDENART',
                   initialValue: _clientType,
                   items: _clientTypes,
                   onChanged: (v) => setState(() => _clientType = v!),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
                 Row(
                   children: [
                     Expanded(
@@ -187,7 +187,7 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
                   label: 'Vorteile',
                   maxLines: 2,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
                 CustomTextField(
                   controller: _waterloopConcernsController,
                   label: 'Bedenken',
@@ -204,12 +204,12 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
                   controller: _regulationHandlingController,
                   label: 'Handling / Parametrierung',
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
                 CustomTextField(
                   controller: _regulationPositiveController,
                   label: 'Positive Rückmeldung',
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
                 CustomTextField(
                   controller: _regulationWishesController,
                   label: 'Kritik / Wünsche',
@@ -225,12 +225,12 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
                   controller: _coolingFeedbackController,
                   label: 'Allg. Feedback',
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
                 CustomTextField(
                   controller: _coolingAdvantagesController,
                   label: 'Vorteile',
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
                 CustomTextField(
                   controller: _coolingFollowupController,
                   label: 'Follow-up Punkte',
@@ -248,7 +248,7 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
                   items: _energyPriorities,
                   onChanged: (v) => setState(() => _energyPriority = v!),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
                 CustomTextField(
                   controller: _energyCommentController,
                   label: 'Kommentar',
@@ -265,7 +265,7 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
                   controller: _projectChanceController,
                   label: 'Projektchance',
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
                 CustomTextField(
                   controller: _followUpController,
                   label: 'Follow-up (Was/Wann)',
@@ -302,17 +302,17 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
               Text(
                 title,
                 style: GoogleFonts.inter(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600, // Bold
-                  letterSpacing: 2, // Slightly tighter spacing
-                  color: color, // Full color
+                  fontSize: 14, // Larger
+                  fontWeight: FontWeight.w700, // Boldest
+                  letterSpacing: 2,
+                  color: color,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 16),
           Container(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(16), // Reduced padding
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.03), // Subtle tint
               borderRadius: BorderRadius.circular(28),
@@ -339,13 +339,13 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
           child: Text(
             label,
             style: GoogleFonts.inter(
-              fontSize: 11,
+              fontSize: 12, // Larger
               fontWeight: FontWeight.w600, // Bolder
               letterSpacing: 1.5,
               color: Theme.of(context)
                   .colorScheme
                   .onSurface
-                  .withValues(alpha: 0.6), // Visible in light mode
+                  .withValues(alpha: 0.7), // Visible in light mode
             ),
           ),
         ),
@@ -395,13 +395,13 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
           child: Text(
             label.toUpperCase(),
             style: GoogleFonts.inter(
-              fontSize: 11,
+              fontSize: 12, // Larger
               fontWeight: FontWeight.w600,
               letterSpacing: 1.5,
               color: Theme.of(context)
                   .colorScheme
                   .onSurface
-                  .withValues(alpha: 0.6),
+                  .withValues(alpha: 0.7),
             ),
           ),
         ),
