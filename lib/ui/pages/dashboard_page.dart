@@ -34,8 +34,10 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     // AnnotatedRegion removed, using AppBar systemOverlayStyle instead
     return Scaffold(
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.light, // White icons for dark theme
-        backgroundColor: Colors.transparent, // Ensure it melts into the background
+        systemOverlayStyle:
+            SystemUiOverlayStyle.light, // White icons for dark theme
+        backgroundColor:
+            Colors.transparent, // Ensure it melts into the background
         elevation: 0,
         automaticallyImplyLeading:
             false, // Hide back button since it's now Home
@@ -138,7 +140,8 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           PieChartData(
             sectionsSpace: 2,
             centerSpaceRadius: 40,
-            pieTouchData: PieTouchData(enabled: false), // Disable internal handling
+            pieTouchData:
+                PieTouchData(enabled: false), // Disable internal handling
             sections: typeCounts.entries.toList().asMap().entries.map((entry) {
               final value = entry.value;
               final percentage =
@@ -155,39 +158,40 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                 label = label.replaceFirst(' ', '\n');
               }
 
-            return PieChartSectionData(
-              color: color,
-              value: value.value.toDouble(),
-              title: _showAbsoluteNumbers
-                  ? value.value.toString()
-                  : '$percentage%',
-              radius: 65, // Slightly reduced
-              titlePositionPercentageOffset: 0.55, // Inside
-              titleStyle: GoogleFonts.inter(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.white.withValues(alpha: 0.9),
-                shadows: [
-                  const Shadow(
-                    color: Colors.black45,
-                    blurRadius: 2,
-                    offset: Offset(0, 1),
-                  ),
-                ],
-              ),
-              badgeWidget: Text(
-                label,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.inter(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  color: color,
-                  height: 1.1,
+              return PieChartSectionData(
+                color: color,
+                value: value.value.toDouble(),
+                title: _showAbsoluteNumbers
+                    ? value.value.toString()
+                    : '$percentage%',
+                radius: 65, // Slightly reduced
+                titlePositionPercentageOffset: 0.55, // Inside
+                titleStyle: GoogleFonts.inter(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white.withValues(alpha: 0.9),
+                  shadows: [
+                    const Shadow(
+                      color: Colors.black45,
+                      blurRadius: 2,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
                 ),
-              ),
-              badgePositionPercentageOffset: 1.6, // Outside further
-            );
-          }).toList(),
+                badgeWidget: Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: color,
+                    height: 1.1,
+                  ),
+                ),
+                badgePositionPercentageOffset: 1.6, // Outside further
+              );
+            }).toList(),
+          ),
         ),
       ),
     );
@@ -224,6 +228,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           child: _buildNavButton(
             context,
             icon: Icons.person_add_outlined,
+            label: 'Neuer Lead',
             color: const Color(0xFF6366F1),
             onTap: () => Navigator.push(
               context,
@@ -231,11 +236,12 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
             ),
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 8),
         Expanded(
           child: _buildNavButton(
             context,
             icon: Icons.qr_code_scanner_rounded,
+            label: 'Scan',
             color: const Color(0xFF10B981),
             onTap: () => Navigator.push(
               context,
@@ -243,20 +249,22 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
             ),
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 8),
         Expanded(
           child: _buildNavButton(
             context,
             icon: Icons.layers_outlined,
+            label: 'Listen',
             color: const Color(0xFFF59E0B),
             onTap: () => _showArchiveBottomSheet(context),
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 8),
         Expanded(
           child: _buildNavButton(
             context,
             icon: Icons.settings_outlined,
+            label: 'Optionen',
             color: Colors.grey,
             onTap: () => Navigator.push(
               context,
@@ -271,34 +279,66 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
   Widget _buildNavButton(
     BuildContext context, {
     required IconData icon,
+    required String label,
     required Color color,
     required VoidCallback onTap,
   }) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
-        height: 64,
+        height: 80, // Increased height for label
         decoration: BoxDecoration(
-          color: Theme.of(context).cardTheme.color,
+          color: theme.cardTheme.color,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-              color: Theme.of(context)
-                  .colorScheme
-                  .onSurface
-                  .withValues(alpha: 0.05)),
+              color: isDark
+                  ? Colors.white10
+                  : Colors.black.withValues(alpha: 0.05)),
+          boxShadow: isDark
+              ? []
+              : [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.03),
+                    blurRadius: 5,
+                    offset: const Offset(0, 2),
+                  )
+                ],
         ),
-        child: Center(
-          child: Icon(icon, color: color, size: 28),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: color, size: 26),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: GoogleFonts.inter(
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+                color: isDark ? Colors.white70 : Colors.black87,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
         ),
       ),
     );
   }
 
   void _showArchiveBottomSheet(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final backgroundColor = isDark ? const Color(0xFF1E293B) : Colors.white;
+    final textColor = isDark ? Colors.white : Colors.black87;
+
     showModalBottomSheet(
       context: context,
-      backgroundColor: const Color(0xFF1E293B),
+      backgroundColor: backgroundColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
       ),
@@ -311,18 +351,31 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
               'ARCHIV & LISTEN',
               style: GoogleFonts.inter(
                 fontSize: 13,
-                fontWeight: FontWeight.w300,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 3,
-                color: Colors.white38,
+                color: isDark ? Colors.white38 : Colors.black38,
               ),
             ),
             const SizedBox(height: 32),
             ListTile(
-              leading: const Icon(
-                Icons.people_outline,
-                color: Colors.indigoAccent,
+              leading: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.indigoAccent.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(
+                  Icons.people_outline,
+                  color: Colors.indigoAccent,
+                ),
               ),
-              title: const Text('Messeberichte (Leads)'),
+              title: Text(
+                'Messeberichte (Leads)',
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w500,
+                  color: textColor,
+                ),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -331,13 +384,26 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                 );
               },
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             ListTile(
-              leading: const Icon(
-                Icons.qr_code_2_rounded,
-                color: Color(0xFF10B981),
+              leading: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF10B981).withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(
+                  Icons.qr_code_2_rounded,
+                  color: Color(0xFF10B981),
+                ),
               ),
-              title: const Text('Gästeliste (Check-in)'),
+              title: Text(
+                'Gästeliste (Check-in)',
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w500,
+                  color: textColor,
+                ),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
