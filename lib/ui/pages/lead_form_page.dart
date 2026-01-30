@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:camera/camera.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter/foundation.dart';
 import '../../models/lead.dart';
 import '../../providers/lead_provider.dart';
 import '../../providers/auth_provider.dart';
@@ -524,28 +525,48 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
   }
 
   void _scanBusinessCard() async {
-    final cameras = await availableCameras();
-    if (cameras.isEmpty) return;
-
-    if (!mounted) return;
-    final image = await Navigator.push<XFile>(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CameraScannerPage(camera: cameras.first),
-      ),
+    final picker = ImagePicker();
+    final image = await picker.pickImage(
+      source: ImageSource.camera,
+      maxWidth: 1600,
+      maxHeight: 1600,
+      imageQuality: 85,
     );
 
     if (image != null) {
-      final data = await OCRService().scanBusinessCard(image);
-      setState(() {
-        _nameController.text = data['name'] ?? '';
-        _companyController.text = data['company'] ?? '';
-        _countryController.text = data['country'] ?? '';
-      });
+      // Show loading
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Visitenkarte erfolgreich gescannt')),
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) =>
+              const Center(child: CircularProgressIndicator()),
         );
+      }
+
+      final data = await OCRService().scanBusinessCard(image);
+
+      if (mounted) {
+        Navigator.pop(context); // Pop loading
+        setState(() {
+          _nameController.text = data['name'] ?? '';
+          _companyController.text = data['company'] ?? '';
+          _countryController.text = data['country'] ?? '';
+        });
+
+        if (kIsWeb) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                  'Foto aufgenommen. Texterkennung im Browser eingeschränkt.'),
+              duration: Duration(seconds: 4),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Visitenkarte erfolgreich gescannt')),
+          );
+        }
       }
     }
   }
@@ -597,72 +618,5 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
         }
       }
     }
-  }
-}
-
-class CameraScannerPage extends StatefulWidget {
-  final CameraDescription camera;
-  const CameraScannerPage({super.key, required this.camera});
-
-  @override
-  State<CameraScannerPage> createState() => _CameraScannerPageState();
-}
-
-class _CameraScannerPageState extends State<CameraScannerPage> {
-  late CameraController _controller;
-  late Future<void> _initializeControllerFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = CameraController(widget.camera, ResolutionPreset.medium);
-    _initializeControllerFuture = _controller.initialize();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'CAMERA SCANNER',
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.w200,
-            letterSpacing: 4,
-            fontSize: 14,
-          ),
-        ),
-      ),
-      body: FutureBuilder<void>(
-        future: _initializeControllerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return CameraPreview(_controller);
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.large(
-        onPressed: () async {
-          try {
-            await _initializeControllerFuture;
-            final image = await _controller.takePicture();
-            if (context.mounted) Navigator.pop(context, image);
-          } catch (e) {
-            debugPrint(e.toString());
-          }
-        },
-        backgroundColor: Colors.white.withValues(alpha: 0.1),
-        shape: const CircleBorder(side: BorderSide(color: Colors.white24)),
-        child: const Icon(Icons.camera_outlined, color: Colors.indigoAccent),
-      ),
-    );
   }
 }

@@ -155,9 +155,22 @@ class _QRScannerPageState extends ConsumerState<QRScannerPage> {
       }
     } catch (e) {
       if (mounted) {
+        String errorMessage = e.toString();
+        if (errorMessage.contains('permission')) {
+          errorMessage = 'Kameraberechtigung wurde verweigert.';
+        } else if (errorMessage.contains('not found')) {
+          errorMessage = 'Keine Kamera gefunden.';
+        } else if (errorMessage.contains('Secure context')) {
+          errorMessage = 'Scanner benötigt HTTPS (sichere Verbindung).';
+        }
+
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Fehler: $e')));
+        ).showSnackBar(SnackBar(
+          content: Text('Fehler: $errorMessage'),
+          backgroundColor: Colors.redAccent,
+          duration: const Duration(seconds: 5),
+        ));
         setState(() => _isScanning = true);
       }
     }

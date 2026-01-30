@@ -1,10 +1,17 @@
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
 
 class OCRService {
   final TextRecognizer _textRecognizer = TextRecognizer();
 
   Future<Map<String, String>> scanBusinessCard(XFile image) async {
+    if (kIsWeb) {
+      // ML Kit is not supported on web.
+      // Return empty results instead of crashing.
+      return {'name': '', 'company': '', 'country': ''};
+    }
+
     final InputImage inputImage = InputImage.fromFilePath(image.path);
     final RecognizedText recognizedText = await _textRecognizer.processImage(
       inputImage,
@@ -37,6 +44,8 @@ class OCRService {
   }
 
   void dispose() {
-    _textRecognizer.close();
+    if (!kIsWeb) {
+      _textRecognizer.close();
+    }
   }
 }
