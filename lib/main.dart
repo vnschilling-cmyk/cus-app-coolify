@@ -22,9 +22,9 @@ class LeadManagementApp extends ConsumerWidget {
     final authState = ref.watch(authProvider);
     final themeMode = ref.watch(themeProvider);
 
-    // Check for registration path on web
-    final String url = Uri.base.toString();
-    final bool isRegisterPath = url.toLowerCase().contains('register');
+    // Check for registration path on web (robust detection)
+    final String currentUrl = Uri.base.toString().toLowerCase();
+    final bool isRegisterPath = currentUrl.contains('register');
 
     return MaterialApp(
       title: 'Messe Connect',
@@ -32,6 +32,9 @@ class LeadManagementApp extends ConsumerWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
+      routes: {
+        '/register': (context) => const RegisterPage(),
+      },
       home: isRegisterPath
           ? const RegisterPage()
           : authState.when(
