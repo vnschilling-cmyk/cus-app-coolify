@@ -23,9 +23,8 @@ class LeadManagementApp extends ConsumerWidget {
     final themeMode = ref.watch(themeProvider);
 
     // Check for registration path on web
-    final String path = Uri.base.toString();
-    final bool isRegisterPath =
-        path.contains('/register') || path.contains('?register');
+    final String url = Uri.base.toString();
+    final bool isRegisterPath = url.toLowerCase().contains('register');
 
     return MaterialApp(
       title: 'Messe Connect',
