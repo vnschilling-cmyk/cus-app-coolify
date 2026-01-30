@@ -21,7 +21,7 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'MESSEBERICHTE',
+          'MESSEBERICHTE v1.1',
           style: GoogleFonts.inter(
             fontWeight: FontWeight.w200,
             letterSpacing: 4,
@@ -126,18 +126,28 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     // Explicitly define text text color based on brightness to ensure contrast
-    final Color textColor = isDark ? Colors.white : const Color(0xFF1E293B);
-    final Color subTextColor =
-        isDark ? Colors.white70 : const Color(0xFF334155);
+    final Color bgColor = isDark
+        ? (theme.cardTheme.color ?? const Color(0xFF1E293B))
+        : Colors.white;
+    final Color textColor = isDark ? Colors.white : Colors.black;
+    final Color subTextColor = isDark ? Colors.white70 : Colors.black87;
+    final Color borderColor = isDark ? Colors.white10 : Colors.black12;
 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: theme.cardTheme.color,
+        color: bgColor,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: textColor.withValues(alpha: 0.1),
-        ),
+        border: Border.all(color: borderColor),
+        boxShadow: isDark
+            ? []
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,12 +157,14 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: theme.primaryColor.withValues(alpha: 0.1),
+                  color: isDark
+                      ? const Color(0xFF334155)
+                      : const Color(0xFFE0E7FF),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
                   Icons.business_outlined,
-                  color: theme.primaryColor,
+                  color: isDark ? Colors.white : const Color(0xFF4F46E5),
                   size: 18,
                 ),
               ),
@@ -185,7 +197,9 @@ class _LeadListPageState extends ConsumerState<LeadListPage> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: textColor.withValues(alpha: 0.05),
+                  color: isDark
+                      ? Colors.white10
+                      : Colors.black.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
