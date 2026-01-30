@@ -9,6 +9,10 @@ class CustomTextField extends StatelessWidget {
   final int maxLines;
   final String? Function(String?)? validator;
 
+  final bool obscureText;
+  final Widget? suffixIcon;
+  final Iterable<String>? autofillHints;
+
   const CustomTextField({
     super.key,
     required this.controller,
@@ -19,6 +23,9 @@ class CustomTextField extends StatelessWidget {
     this.validator,
     this.keyboardType,
     this.textInputAction,
+    this.obscureText = false,
+    this.suffixIcon,
+    this.autofillHints,
   });
 
   final TextInputType? keyboardType;
@@ -50,6 +57,8 @@ class CustomTextField extends StatelessWidget {
           validator: validator,
           keyboardType: keyboardType,
           textInputAction: textInputAction,
+          obscureText: obscureText,
+          autofillHints: autofillHints,
           style: TextStyle(
             fontWeight: FontWeight.w400,
             color: Theme.of(context).colorScheme.onSurface,
@@ -66,6 +75,7 @@ class CustomTextField extends StatelessWidget {
                         .withValues(alpha: 0.4),
                   )
                 : null,
+            suffixIcon: suffixIcon,
           ),
         ),
       ],

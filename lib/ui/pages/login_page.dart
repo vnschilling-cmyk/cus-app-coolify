@@ -119,60 +119,31 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                           : null,
                                 ),
                                 const SizedBox(height: 24),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 4, bottom: 8),
-                                      child: Text(
-                                        'PASSWORT',
-                                        style: GoogleFonts.inter(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w600,
-                                          letterSpacing: 1.5,
-                                          color: Colors.white
-                                              .withValues(alpha: 0.7),
-                                        ),
-                                      ),
+                                CustomTextField(
+                                  controller: _passwordController,
+                                  label: 'PASSWORT',
+                                  obscureText: !_isPasswordVisible,
+                                  keyboardType: TextInputType.visiblePassword,
+                                  textInputAction: TextInputAction.done,
+                                  autofillHints: const [AutofillHints.password],
+                                  prefixIcon: Icons.lock_outline_rounded,
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _isPasswordVisible
+                                          ? Icons.visibility_off_outlined
+                                          : Icons.visibility_outlined,
+                                      size: 20,
+                                      color:
+                                          Colors.white.withValues(alpha: 0.3),
                                     ),
-                                    TextFormField(
-                                      controller: _passwordController,
-                                      obscureText: !_isPasswordVisible,
-                                      keyboardType:
-                                          TextInputType.visiblePassword,
-                                      textInputAction: TextInputAction.done,
-                                      onFieldSubmitted: (_) => _handleLogin(),
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w200),
-                                      validator: (v) =>
-                                          v == null || v.length < 5
-                                              ? 'Mind. 5 Zeichen'
-                                              : null,
-                                      decoration: InputDecoration(
-                                        prefixIcon: Icon(
-                                          Icons.lock_outline_rounded,
-                                          size: 20,
-                                          color: Colors.white
-                                              .withValues(alpha: 0.3),
-                                        ),
-                                        suffixIcon: IconButton(
-                                          icon: Icon(
-                                            _isPasswordVisible
-                                                ? Icons.visibility_off_outlined
-                                                : Icons.visibility_outlined,
-                                            size: 20,
-                                            color: Colors.white
-                                                .withValues(alpha: 0.3),
-                                          ),
-                                          onPressed: () => setState(
-                                            () => _isPasswordVisible =
-                                                !_isPasswordVisible,
-                                          ),
-                                        ),
-                                      ),
+                                    onPressed: () => setState(
+                                      () => _isPasswordVisible =
+                                          !_isPasswordVisible,
                                     ),
-                                  ],
+                                  ),
+                                  validator: (v) => v == null || v.length < 5
+                                      ? 'Mind. 5 Zeichen'
+                                      : null,
                                 ),
                                 const SizedBox(height: 48),
                                 authState.when(
