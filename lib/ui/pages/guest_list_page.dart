@@ -170,7 +170,7 @@ class GuestListPage extends ConsumerWidget {
             const Center(child: CircularProgressIndicator(strokeWidth: 2)),
         error: (err, stack) => Center(
           child: Text(
-            'Fehler beim Laden',
+            'Fehler beim Laden: $err',
             style: GoogleFonts.inter(
               fontWeight: FontWeight.w200,
               color: Colors.white38,

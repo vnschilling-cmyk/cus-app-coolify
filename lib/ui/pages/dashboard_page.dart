@@ -16,11 +16,8 @@ import '../../providers/guest_provider.dart';
 import '../../models/guest.dart';
 import 'settings_page.dart';
 
-enum DashboardMode { leads, guests }
-
 class DashboardPage extends ConsumerStatefulWidget {
-  final DashboardMode initialMode;
-  const DashboardPage({super.key, this.initialMode = DashboardMode.leads});
+  const DashboardPage({super.key});
 
   @override
   ConsumerState<DashboardPage> createState() => _DashboardPageState();
@@ -30,12 +27,9 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
   String? _selectedEventId;
   int? _selectedYear;
   bool _showAbsoluteNumbers = false;
-  late DashboardMode _currentMode;
-
   @override
   void initState() {
     super.initState();
-    _currentMode = widget.initialMode;
   }
 
   @override
@@ -63,15 +57,6 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           ),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: Image.asset(
-              'assets/login_logo_dark.png',
-              height: 28,
-              errorBuilder: (context, error, stackTrace) =>
-                  const SizedBox.shrink(),
-            ),
-          ),
           IconButton(
             icon: const Icon(Icons.logout_rounded, color: Colors.white24),
             onPressed: () => ref.read(authProvider.notifier).logout(),
@@ -100,10 +85,6 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
 
   Widget _buildContent(
       List<Lead> leads, List<Event> events, List<Guest> guests) {
-    if (_currentMode == DashboardMode.guests) {
-      return _buildGuestContent(guests);
-    }
-
     final filteredLeads = leads.where((l) {
       bool matchEvent =
           _selectedEventId == null || l.eventId == _selectedEventId;
@@ -118,13 +99,11 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _buildModeToggle(),
-              const SizedBox(height: 16),
               _buildFilters(events, leads),
               const SizedBox(height: 16),
               _buildSummaryCards(filteredLeads),
               const SizedBox(height: 16),
-              _buildFacts(filteredLeads, events),
+              _buildFacts(filteredLeads, events, guests),
               const SizedBox(height: 20),
               Center(child: _buildSectionTitle('KUNDENSTRUKTUR')),
             ],
@@ -136,154 +115,6 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildGuestContent(List<Guest> guests) {
-    final attendedCount = guests.where((g) => g.attended).length;
-    final totalCount = guests.length;
-    final openCount = totalCount - attendedCount;
-    final attendanceRate = totalCount > 0
-        ? (attendedCount / totalCount * 100).toStringAsFixed(1)
-        : '0';
-
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _buildModeToggle(),
-              const SizedBox(height: 24),
-              Row(
-                children: [
-                  _buildStatCard(
-                    context,
-                    title: 'ANMELDUNGEN',
-                    value: totalCount.toString(),
-                    icon: Icons.mark_email_read_rounded,
-                    color: Colors.blueAccent,
-                  ),
-                  const SizedBox(width: 12),
-                  _buildStatCard(
-                    context,
-                    title: 'ANWESEND',
-                    value: attendedCount.toString(),
-                    icon: Icons.verified_user_rounded,
-                    color: Colors.greenAccent,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              _buildStatCard(
-                context,
-                title: 'QUOTE',
-                value: '$attendanceRate%',
-                icon: Icons.pie_chart_rounded,
-                color: Colors.purpleAccent,
-              ),
-              const SizedBox(height: 32),
-              Center(child: _buildSectionTitle('CHECK-IN STATUS')),
-            ],
-          ),
-        ),
-        Expanded(
-          child: Center(
-            child: SizedBox(
-              height: 300,
-              child: PieChart(
-                PieChartData(
-                  sectionsSpace: 2,
-                  centerSpaceRadius: 40,
-                  sections: [
-                    PieChartSectionData(
-                      color: Colors.greenAccent,
-                      value: attendedCount.toDouble(),
-                      title: '$attendedCount',
-                      radius: 60,
-                      titleStyle: GoogleFonts.inter(
-                          fontWeight: FontWeight.bold, color: Colors.black54),
-                    ),
-                    PieChartSectionData(
-                      color: Colors.white10,
-                      value: openCount.toDouble(),
-                      title: '$openCount',
-                      radius: 50,
-                      titleStyle: GoogleFonts.inter(
-                          fontWeight: FontWeight.bold, color: Colors.white54),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildModeToggle() {
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: GestureDetector(
-              onTap: () => setState(() => _currentMode = DashboardMode.leads),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                decoration: BoxDecoration(
-                  color: _currentMode == DashboardMode.leads
-                      ? const Color(0xFF6366F1)
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Center(
-                  child: Text(
-                    'LEADS',
-                    style: GoogleFonts.inter(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: GestureDetector(
-              onTap: () => setState(() => _currentMode = DashboardMode.guests),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                decoration: BoxDecoration(
-                  color: _currentMode == DashboardMode.guests
-                      ? const Color(0xFF10B981)
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Center(
-                  child: Text(
-                    'GÄSTE',
-                    style: GoogleFonts.inter(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -779,18 +610,19 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     );
   }
 
-  Widget _buildFacts(List<Lead> leads, List<Event> events) {
-    if (leads.isEmpty) return const SizedBox.shrink();
-
+  Widget _buildFacts(List<Lead> leads, List<Event> events, List<Guest> guests) {
+    // Lead Conversion
     final hotLeads = leads
         .where(
             (l) => l.projectChance?.contains(RegExp(r'[7-9][0-9]%')) ?? false)
         .length;
-    final conversionRate = ((hotLeads / leads.length) * 100).toStringAsFixed(1);
+    final conversionRate = leads.isNotEmpty
+        ? ((hotLeads / leads.length) * 100).toStringAsFixed(1)
+        : '0.0';
 
-    final avgLeads = events.isNotEmpty
-        ? (leads.length / events.length).toStringAsFixed(1)
-        : '0';
+    // Guest Stats
+    final attendedCount = guests.where((g) => g.attended).length;
+    final totalGuests = guests.length;
 
     return Row(
       children: [
@@ -804,9 +636,9 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
         const SizedBox(width: 12),
         _buildStatCard(
           context,
-          title: 'Ø LEADS/EVENT',
-          value: avgLeads,
-          icon: Icons.analytics_outlined,
+          title: 'CHECK-IN',
+          value: '$attendedCount / $totalGuests',
+          icon: Icons.qr_code_scanner_rounded,
           color: Colors.orangeAccent,
         ),
       ],

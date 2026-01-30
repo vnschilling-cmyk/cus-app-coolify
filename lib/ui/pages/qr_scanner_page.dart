@@ -155,8 +155,7 @@ class _QRScannerPageState extends ConsumerState<QRScannerPage> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                const DashboardPage(initialMode: DashboardMode.guests),
+            builder: (context) => const DashboardPage(),
           ),
           (route) => false,
         );
