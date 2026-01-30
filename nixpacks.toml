@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["flutter", "git", "python3"]
+
+[phases.build]
+cmds = ["flutter pub get", "flutter build web --release"]
+
+[start]
+cmd = "python3 -m http.server $PORT --directory build/web"
