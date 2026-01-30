@@ -42,10 +42,11 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
         automaticallyImplyLeading:
             false, // Hide back button since it's now Home
         title: Text(
-          'MConnect',
+          'Messe Connect',
           style: GoogleFonts.outfit(
             fontWeight: FontWeight.w100,
             fontSize: 32,
+            letterSpacing: 2,
           ),
         ),
         actions: [
@@ -427,42 +428,62 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
         availableYears.contains(_selectedYear) ? _selectedYear : null;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.02),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+        color: Theme.of(context).cardTheme.color,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color:
+              Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.05),
+        ),
+        boxShadow: Theme.of(context).brightness == Brightness.dark
+            ? []
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.03),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'FILTER',
-            style: GoogleFonts.inter(
-              fontSize: 9,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 1,
-              color: Colors.indigoAccent,
-            ),
+          Row(
+            children: [
+              Icon(
+                Icons.tune_rounded,
+                size: 14,
+                color: Theme.of(context).primaryColor,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'FILTER',
+                style: GoogleFonts.inter(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 1.5,
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.5),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           Row(
             children: [
               Expanded(
-                child: DropdownButton<String>(
-                  isExpanded: true,
+                child: _buildModernDropdown<String>(
+                  context: context,
                   value: _selectedEventId,
-                  hint: const Text('Alle Events',
-                      style: TextStyle(color: Colors.white24, fontSize: 13)),
-                  underline: const SizedBox(),
-                  dropdownColor: const Color(0xFF1E293B),
+                  hint: 'Alle Events',
                   items: [
                     const DropdownMenuItem<String>(
                         value: null, child: Text('Alle Events')),
-                    ...events.map((e) => DropdownMenuItem(
-                        value: e.id,
-                        child: Text(e.name,
-                            style: const TextStyle(fontSize: 13)))),
+                    ...events.map((e) =>
+                        DropdownMenuItem(value: e.id, child: Text(e.name))),
                   ],
                   onChanged: (v) {
                     setState(() {
@@ -472,22 +493,17 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                   },
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: 12),
               Expanded(
-                child: DropdownButton<int>(
-                  isExpanded: true,
+                child: _buildModernDropdown<int>(
+                  context: context,
                   value: effectiveSelectedYear,
-                  hint: const Text('Alle Jahre',
-                      style: TextStyle(color: Colors.white24, fontSize: 13)),
-                  underline: const SizedBox(),
-                  dropdownColor: const Color(0xFF1E293B),
+                  hint: 'Alle Jahre',
                   items: [
                     const DropdownMenuItem<int>(
                         value: null, child: Text('Alle Jahre')),
-                    ...availableYears.map((y) => DropdownMenuItem(
-                        value: y,
-                        child: Text(y.toString(),
-                            style: const TextStyle(fontSize: 13)))),
+                    ...availableYears.map((y) =>
+                        DropdownMenuItem(value: y, child: Text(y.toString()))),
                   ],
                   onChanged: (v) => setState(() => _selectedYear = v),
                 ),
@@ -495,6 +511,60 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildModernDropdown<T>({
+    required BuildContext context,
+    required T? value,
+    required String hint,
+    required List<DropdownMenuItem<T>> items,
+    required ValueChanged<T?> onChanged,
+  }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: isDark
+            ? Colors.white.withValues(alpha: 0.03)
+            : Colors.black.withValues(alpha: 0.02),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color:
+              Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.05),
+        ),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<T>(
+          isExpanded: true,
+          value: value,
+          hint: Text(hint,
+              style: TextStyle(
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.3),
+                fontSize: 13,
+              )),
+          icon: Icon(Icons.keyboard_arrow_down_rounded,
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.4),
+              size: 20),
+          dropdownColor: Theme.of(context).canvasColor,
+          borderRadius: BorderRadius.circular(16),
+          elevation: 16,
+          items: items,
+          onChanged: onChanged,
+          style: GoogleFonts.inter(
+            fontSize: 13,
+            color: Theme.of(context).colorScheme.onSurface,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
       ),
     );
   }

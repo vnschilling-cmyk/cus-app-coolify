@@ -22,15 +22,20 @@ class AppTheme {
     ),
 
     // Explicitly define menu colors
-    dropdownMenuTheme: const DropdownMenuThemeData(
+    dropdownMenuTheme: DropdownMenuThemeData(
       menuStyle: MenuStyle(
-        backgroundColor: WidgetStatePropertyAll(Colors.white),
+        backgroundColor: const WidgetStatePropertyAll(Colors.white),
+        elevation: const WidgetStatePropertyAll(12),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        ),
       ),
     ),
-    popupMenuTheme: const PopupMenuThemeData(
+    popupMenuTheme: PopupMenuThemeData(
       color: Colors.white,
       surfaceTintColor: Colors.white,
-      elevation: 8,
+      elevation: 12,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     ),
 
     // Modern Typography with Thin Fonts (Light Mode)
@@ -145,15 +150,20 @@ class AppTheme {
     canvasColor: surfaceColor,
 
     // Explicitly define menu colors
-    dropdownMenuTheme: const DropdownMenuThemeData(
+    dropdownMenuTheme: DropdownMenuThemeData(
       menuStyle: MenuStyle(
-        backgroundColor: WidgetStatePropertyAll(surfaceColor),
+        backgroundColor: const WidgetStatePropertyAll(surfaceColor),
+        elevation: const WidgetStatePropertyAll(12),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        ),
       ),
     ),
-    popupMenuTheme: const PopupMenuThemeData(
+    popupMenuTheme: PopupMenuThemeData(
       color: surfaceColor,
       surfaceTintColor: surfaceColor,
-      elevation: 8,
+      elevation: 12,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     ),
     textTheme: GoogleFonts.interTextTheme(
       const TextTheme(

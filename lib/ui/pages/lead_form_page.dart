@@ -355,34 +355,60 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
     required List<DropdownMenuItem<T>> items,
     required ValueChanged<T?> onChanged,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 4, bottom: 8),
           child: Text(
-            label,
+            label.toUpperCase(),
             style: GoogleFonts.inter(
-              fontSize: 12, // Larger
-              fontWeight: FontWeight.w600, // Bolder
-              letterSpacing: 1.5,
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1,
               color: Theme.of(context)
                   .colorScheme
                   .onSurface
-                  .withValues(alpha: 0.7), // Visible in light mode
+                  .withValues(alpha: 0.5),
             ),
           ),
         ),
-        DropdownButtonFormField<T>(
-          isExpanded: true,
-          value: value,
-          items: items,
-          onChanged: onChanged,
-          decoration: const InputDecoration(),
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontWeight: FontWeight.w400,
-            fontSize: 14,
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            color: isDark
+                ? Colors.white.withValues(alpha: 0.03)
+                : Colors.black.withValues(alpha: 0.02),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.05),
+            ),
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<T>(
+              isExpanded: true,
+              value: value,
+              items: items,
+              onChanged: onChanged,
+              icon: Icon(Icons.keyboard_arrow_down_rounded,
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.4)),
+              dropdownColor: Theme.of(context).canvasColor,
+              borderRadius: BorderRadius.circular(20),
+              elevation: 16,
+              style: GoogleFonts.inter(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontWeight: FontWeight.w400,
+                fontSize: 14,
+              ),
+            ),
           ),
         ),
       ],
@@ -418,6 +444,8 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
     required List<String> items,
     required ValueChanged<String?> onChanged,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -426,62 +454,70 @@ class _LeadFormPageState extends ConsumerState<LeadFormPage> {
           child: Text(
             label.toUpperCase(),
             style: GoogleFonts.inter(
-              fontSize: 12, // Larger
+              fontSize: 11,
               fontWeight: FontWeight.w600,
-              letterSpacing: 1.5,
+              letterSpacing: 1,
               color: Theme.of(context)
                   .colorScheme
                   .onSurface
-                  .withValues(alpha: 0.7),
+                  .withValues(alpha: 0.5),
             ),
           ),
         ),
-        Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: items.map((item) {
-            final isSelected = item == value;
-            return InkWell(
-              onTap: () => onChanged(item),
-              borderRadius: BorderRadius.circular(12),
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 10,
-                ),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? const Color(0xFF10B981).withValues(alpha: 0.1)
-                      : Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: isDark
+                ? Colors.white.withValues(alpha: 0.03)
+                : Colors.black.withValues(alpha: 0.02),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.05),
+            ),
+          ),
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: items.map((item) {
+              final isSelected = item == value;
+              return InkWell(
+                onTap: () => onChanged(item),
+                borderRadius: BorderRadius.circular(12),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  decoration: BoxDecoration(
                     color: isSelected
-                        ? const Color(0xFF10B981)
-                        : Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withValues(alpha: 0.1),
+                        ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: isSelected
+                          ? Theme.of(context)
+                              .primaryColor
+                              .withValues(alpha: 0.3)
+                          : Colors.transparent,
+                    ),
+                  ),
+                  child: Text(
+                    item,
+                    style: GoogleFonts.inter(
+                      fontSize: 13,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w400,
+                      color: isSelected
+                          ? Theme.of(context).primaryColor
+                          : Theme.of(context).colorScheme.onSurface,
+                    ),
                   ),
                 ),
-                child: Text(
-                  item,
-                  style: GoogleFonts.inter(
-                    fontSize: 12,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                    color: isSelected
-                        ? const Color(0xFF10B981)
-                        : Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withValues(alpha: 0.7),
-                  ),
-                ),
-              ),
-            );
-          }).toList(),
+              );
+            }).toList(),
+          ),
         ),
       ],
     );
