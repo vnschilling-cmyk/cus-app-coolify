@@ -53,7 +53,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: Image.asset(
-              'assets/logo.png',
+              'assets/login_logo_dark.png',
               height: 28,
               errorBuilder: (context, error, stackTrace) =>
                   const SizedBox.shrink(),

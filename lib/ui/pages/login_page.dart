@@ -55,7 +55,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         child: Hero(
                           tag: 'logo',
                           child: Image.asset(
-                            'assets/logo.png',
+                            'assets/login_logo_dark.png',
                             height: 140,
                             fit: BoxFit.contain,
                             errorBuilder: (context, error, stackTrace) =>
