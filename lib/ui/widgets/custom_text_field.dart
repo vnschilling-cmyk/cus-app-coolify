@@ -64,6 +64,29 @@ class CustomTextField extends StatelessWidget {
             color: Theme.of(context).colorScheme.onSurface,
           ),
           decoration: InputDecoration(
+            filled: true,
+            fillColor: Theme.of(context).cardTheme.color,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.1),
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             hintText: hint,
             prefixIcon: prefixIcon != null
                 ? Icon(

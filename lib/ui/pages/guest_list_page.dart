@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../providers/guest_provider.dart';
 import '../../models/guest.dart';
+import '../widgets/custom_text_field.dart';
 
 class GuestListPage extends ConsumerWidget {
   const GuestListPage({super.key});
@@ -198,6 +199,8 @@ class GuestListPage extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         backgroundColor: const Color(0xFF1E293B), // Match dark theme
         title: Text('Gast hinzufügen',
             style: GoogleFonts.inter(color: Colors.white)),
@@ -207,53 +210,30 @@ class GuestListPage extends ConsumerWidget {
             Row(
               children: [
                 Expanded(
-                  child: TextField(
+                  child: CustomTextField(
                     controller: firstNameController,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: const InputDecoration(
-                      labelText: 'Vorname',
-                      labelStyle: TextStyle(color: Colors.white60),
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white24)),
-                    ),
+                    label: 'Vorname',
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: TextField(
+                  child: CustomTextField(
                     controller: lastNameController,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: const InputDecoration(
-                      labelText: 'Nachname',
-                      labelStyle: TextStyle(color: Colors.white60),
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white24)),
-                    ),
+                    label: 'Nachname',
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 12),
-            TextField(
+            CustomTextField(
               controller: companyController,
-              style: const TextStyle(color: Colors.white),
-              decoration: const InputDecoration(
-                labelText: 'Firma',
-                labelStyle: TextStyle(color: Colors.white60),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white24)),
-              ),
+              label: 'Firma',
             ),
             const SizedBox(height: 12),
-            TextField(
+            CustomTextField(
               controller: emailController,
-              style: const TextStyle(color: Colors.white),
-              decoration: const InputDecoration(
-                labelText: 'E-Mail',
-                labelStyle: TextStyle(color: Colors.white60),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white24)),
-              ),
+              label: 'E-Mail',
+              keyboardType: TextInputType.emailAddress,
             ),
           ],
         ),
@@ -314,6 +294,8 @@ class GuestListPage extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         backgroundColor: const Color(0xFF1E293B), // Match dark theme
         title: Text('Gast bearbeiten',
             style: GoogleFonts.inter(color: Colors.white)),
@@ -323,53 +305,30 @@ class GuestListPage extends ConsumerWidget {
             Row(
               children: [
                 Expanded(
-                  child: TextField(
+                  child: CustomTextField(
                     controller: firstNameController,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: const InputDecoration(
-                      labelText: 'Vorname',
-                      labelStyle: TextStyle(color: Colors.white60),
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white24)),
-                    ),
+                    label: 'Vorname',
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: TextField(
+                  child: CustomTextField(
                     controller: lastNameController,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: const InputDecoration(
-                      labelText: 'Nachname',
-                      labelStyle: TextStyle(color: Colors.white60),
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white24)),
-                    ),
+                    label: 'Nachname',
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 12),
-            TextField(
+            CustomTextField(
               controller: companyController,
-              style: const TextStyle(color: Colors.white),
-              decoration: const InputDecoration(
-                labelText: 'Firma',
-                labelStyle: TextStyle(color: Colors.white60),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white24)),
-              ),
+              label: 'Firma',
             ),
             const SizedBox(height: 12),
-            TextField(
+            CustomTextField(
               controller: emailController,
-              style: const TextStyle(color: Colors.white),
-              decoration: const InputDecoration(
-                labelText: 'E-Mail',
-                labelStyle: TextStyle(color: Colors.white60),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white24)),
-              ),
+              label: 'E-Mail',
+              keyboardType: TextInputType.emailAddress,
             ),
           ],
         ),
