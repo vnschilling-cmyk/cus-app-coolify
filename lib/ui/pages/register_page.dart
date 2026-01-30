@@ -123,7 +123,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return Column(
       children: [
         const Icon(Icons.check_circle_outline,
-            color: Colors.emeraldAccent, size: 80),
+            color: Colors.greenAccent, size: 80),
         const SizedBox(height: 24),
         Text(
           'REGISTRIERUNG ERFOLGREICH!',
