@@ -43,6 +43,7 @@ class Guest {
 
   Map<String, dynamic> toJson() {
     return {
+      'name': '$firstName $lastName',
       'first_name': firstName,
       'last_name': lastName,
       'email': email,
