@@ -23,6 +23,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final authState = ref.watch(authProvider);
 
     return Scaffold(
+      backgroundColor: const Color(0xFF0F172A),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(

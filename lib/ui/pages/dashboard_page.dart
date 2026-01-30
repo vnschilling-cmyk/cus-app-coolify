@@ -119,12 +119,16 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     }
 
     final colors = [
-      Colors.indigoAccent,
-      Colors.greenAccent,
-      Colors.orangeAccent,
-      Colors.purpleAccent,
-      Colors.cyanAccent,
-      Colors.pinkAccent
+      const Color(0xFF6366F1), // Indigo
+      const Color(0xFF10B981), // Emerald
+      const Color(0xFFF59E0B), // Amber
+      const Color(0xFFEF4444), // Rose
+      const Color(0xFF8B5CF6), // Violet
+      const Color(0xFF0EA5E9), // Sky
+      const Color(0xFF84CC16), // Lime
+      const Color(0xFFF97316), // Orange
+      const Color(0xFF14B8A6), // Teal
+      const Color(0xFFD946EF), // Fuchsia
     ];
 
     return SizedBox(
