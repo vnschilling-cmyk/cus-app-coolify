@@ -22,9 +22,12 @@ class LeadManagementApp extends ConsumerWidget {
     final authState = ref.watch(authProvider);
     final themeMode = ref.watch(themeProvider);
 
-    // Check for registration path on web (robust detection)
-    final String currentUrl = Uri.base.toString().toLowerCase();
-    final bool isRegisterPath = currentUrl.contains('register');
+    // Check for registration path on web (Extreme Robust Detection)
+    final Uri uri = Uri.base;
+    final bool isRegisterPath = uri.path.toLowerCase().contains('register') ||
+        uri.queryParameters.containsKey('register') ||
+        uri.query.toLowerCase().contains('register') ||
+        uri.fragment.toLowerCase().contains('register');
 
     return MaterialApp(
       title: 'Messe Connect',
