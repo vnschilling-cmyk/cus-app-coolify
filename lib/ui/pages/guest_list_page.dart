@@ -31,6 +31,14 @@ class GuestListPage extends ConsumerWidget {
             onPressed: () =>
                 ref.read(guestListProvider.notifier).refreshGuests(),
           ),
+          IconButton(
+            icon: const Icon(
+              Icons.add_rounded,
+              size: 24,
+              color: Color(0xFF3BC0C3),
+            ),
+            onPressed: () => _showCreateDialog(context, ref),
+          ),
         ],
       ),
       body: guestListAsync.when(
@@ -177,6 +185,122 @@ class GuestListPage extends ConsumerWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  void _showCreateDialog(BuildContext context, WidgetRef ref) {
+    final firstNameController = TextEditingController();
+    final lastNameController = TextEditingController();
+    final companyController = TextEditingController();
+    final emailController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1E293B), // Match dark theme
+        title: Text('Gast hinzufügen',
+            style: GoogleFonts.inter(color: Colors.white)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: firstNameController,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: const InputDecoration(
+                      labelText: 'Vorname',
+                      labelStyle: TextStyle(color: Colors.white60),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white24)),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: TextField(
+                    controller: lastNameController,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: const InputDecoration(
+                      labelText: 'Nachname',
+                      labelStyle: TextStyle(color: Colors.white60),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white24)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: companyController,
+              style: const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
+                labelText: 'Firma',
+                labelStyle: TextStyle(color: Colors.white60),
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24)),
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: emailController,
+              style: const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
+                labelText: 'E-Mail',
+                labelStyle: TextStyle(color: Colors.white60),
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24)),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Abbrechen'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF3BC0C3),
+              foregroundColor: Colors.white,
+            ),
+            onPressed: () {
+              if (firstNameController.text.isEmpty ||
+                  lastNameController.text.isEmpty ||
+                  emailController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content:
+                        Text('Bitte Vorname, Nachname und E-Mail ausfüllen.'),
+                    backgroundColor: Colors.orange,
+                  ),
+                );
+                return;
+              }
+
+              final email = emailController.text.trim().toLowerCase();
+              final qrCode =
+                  'GUEST_${email.hashCode}_${DateTime.now().millisecondsSinceEpoch % 10000}';
+
+              final newGuest = Guest(
+                id: '',
+                firstName: firstNameController.text.trim(),
+                lastName: lastNameController.text.trim(),
+                company: companyController.text.trim(),
+                email: email,
+                attended: false,
+                qrCode: qrCode,
+              );
+
+              ref.read(guestListProvider.notifier).createGuest(newGuest);
+              Navigator.pop(context);
+            },
+            child: const Text('Hinzufügen'),
+          ),
+        ],
       ),
     );
   }

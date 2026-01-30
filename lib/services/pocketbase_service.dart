@@ -93,7 +93,19 @@ class PocketBaseService {
     await pb.collection('guests').update(guest.id, body: guest.toJson());
   }
 
+  Future<void> createGuest(Guest guest) async {
+    return registerGuest(guest);
+  }
+
   Future<void> deleteGuest(String id) async {
-    await pb.collection('guests').delete(id);
+    try {
+      await pb.collection('guests').delete(id);
+    } catch (e) {
+      // Ignore 404 (already deleted)
+      if (e.toString().contains('404')) {
+        return;
+      }
+      rethrow;
+    }
   }
 }

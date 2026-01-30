@@ -35,6 +35,14 @@ class GuestListNotifier extends AsyncNotifier<List<Guest>> {
     });
   }
 
+  Future<void> createGuest(Guest guest) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await _pbService.createGuest(guest);
+      return _fetchGuests();
+    });
+  }
+
   Future<void> updateGuest(Guest guest) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
