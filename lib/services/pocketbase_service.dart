@@ -43,6 +43,10 @@ class PocketBaseService {
     await pb.collection('leads').create(body: lead.toJson());
   }
 
+  Future<void> registerGuest(Guest guest) async {
+    await pb.collection('guests').create(body: guest.toJson());
+  }
+
   Future<void> updateLead(Lead lead) async {
     await pb.collection('leads').update(lead.id, body: lead.toJson());
   }

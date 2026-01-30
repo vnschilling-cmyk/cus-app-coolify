@@ -83,7 +83,7 @@ class GuestListPage extends ConsumerWidget {
                           ),
                         ),
                         Text(
-                          guest.company ?? 'Keine Firma angegeben',
+                          '${guest.company ?? "Keine Firma"} • ${guest.email ?? ""}',
                           style: GoogleFonts.inter(
                             fontSize: 12,
                             fontWeight: FontWeight.w200,
