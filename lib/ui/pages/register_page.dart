@@ -295,8 +295,15 @@ class _RegisterPageState extends State<RegisterPage> {
       } catch (e) {
         setState(() => _isSubmitting = false);
         if (mounted) {
+          final errorMessage = e.toString().replaceAll('Exception: ', '');
+          final isDuplicate = errorMessage.contains('bereits registriert');
+
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Fehler bei der Registrierung: $e')),
+            SnackBar(
+              content: Text(errorMessage),
+              backgroundColor: isDuplicate ? Colors.orange : Colors.red,
+              behavior: SnackBarBehavior.floating,
+            ),
           );
         }
       }

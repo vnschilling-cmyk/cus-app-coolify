@@ -44,7 +44,22 @@ class PocketBaseService {
   }
 
   Future<void> registerGuest(Guest guest) async {
+    final exists = await checkIfGuestExists(guest.email!);
+    if (exists) {
+      throw Exception('Diese E-Mail-Adresse ist bereits registriert.');
+    }
     await pb.collection('guests').create(body: guest.toJson());
+  }
+
+  Future<bool> checkIfGuestExists(String email) async {
+    try {
+      final result = await pb.collection('guests').getList(
+            filter: 'email = "$email"',
+          );
+      return result.items.isNotEmpty;
+    } catch (e) {
+      return false;
+    }
   }
 
   Future<void> updateLead(Lead lead) async {
