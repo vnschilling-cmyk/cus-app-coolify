@@ -37,10 +37,27 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Center(
           child: SingleChildScrollView(
             padding:
-                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 48.0),
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 48.0),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 500),
-              child: _registeredQrCode == null ? _buildForm() : _buildSuccess(),
+              constraints: const BoxConstraints(maxWidth: 600),
+              child: Card(
+                elevation: 20,
+                shadowColor: Colors.black45,
+                color: const Color(0xFF1E293B).withValues(alpha: 0.8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32),
+                  side: BorderSide(
+                    color: Colors.white.withValues(alpha: 0.05),
+                    width: 1,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: _registeredQrCode == null
+                      ? _buildForm(context)
+                      : _buildSuccess(),
+                ),
+              ),
             ),
           ),
         ),
@@ -48,7 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _buildForm() {
+  Widget _buildForm(BuildContext context) {
     return Form(
       key: _formKey,
       child: Column(
@@ -68,27 +85,51 @@ class _RegisterPageState extends State<RegisterPage> {
           const SizedBox(height: 32),
           _buildHeader('GÄSTE-REGISTRIERUNG', 'BITTE DATEN EINGEBEN'),
           const SizedBox(height: 48),
-          Row(
-            children: [
-              Expanded(
-                child: CustomTextField(
-                  controller: _firstNameController,
-                  label: 'Vorname',
-                  textInputAction: TextInputAction.next,
-                  validator: (v) => v?.isEmpty == true ? 'Pflichtfeld' : null,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: CustomTextField(
-                  controller: _lastNameController,
-                  label: 'Nachname',
-                  textInputAction: TextInputAction.next,
-                  validator: (v) => v?.isEmpty == true ? 'Pflichtfeld' : null,
-                ),
-              ),
-            ],
-          ),
+          LayoutBuilder(builder: (context, constraints) {
+            if (constraints.maxWidth > 400) {
+              return Row(
+                children: [
+                  Expanded(
+                    child: CustomTextField(
+                      controller: _firstNameController,
+                      label: 'Vorname',
+                      textInputAction: TextInputAction.next,
+                      validator: (v) =>
+                          v?.isEmpty == true ? 'Pflichtfeld' : null,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: CustomTextField(
+                      controller: _lastNameController,
+                      label: 'Nachname',
+                      textInputAction: TextInputAction.next,
+                      validator: (v) =>
+                          v?.isEmpty == true ? 'Pflichtfeld' : null,
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              return Column(
+                children: [
+                  CustomTextField(
+                    controller: _firstNameController,
+                    label: 'Vorname',
+                    textInputAction: TextInputAction.next,
+                    validator: (v) => v?.isEmpty == true ? 'Pflichtfeld' : null,
+                  ),
+                  const SizedBox(height: 24),
+                  CustomTextField(
+                    controller: _lastNameController,
+                    label: 'Nachname',
+                    textInputAction: TextInputAction.next,
+                    validator: (v) => v?.isEmpty == true ? 'Pflichtfeld' : null,
+                  ),
+                ],
+              );
+            }
+          }),
           const SizedBox(height: 24),
           CustomTextField(
             controller: _emailController,
