@@ -23,7 +23,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final authState = ref.watch(authProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
+      backgroundColor: const Color(0xFF334155), // TEKO Grey Bg
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Container(
@@ -33,16 +33,31 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
+              colors: [Color(0xFF334155), Color(0xFF1E293B)],
             ),
           ),
           child: Center(
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               padding:
-                  const EdgeInsets.symmetric(horizontal: 32.0, vertical: 48.0),
-              child: Form(
-                key: _formKey,
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 48.0),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 600),
+                child: Card(
+                  elevation: 20,
+                  shadowColor: Colors.black45,
+                  color: const Color(0xFF475569).withValues(alpha: 0.9), // TEKO Grey Surface
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(32),
+                    side: BorderSide(
+                      color: const Color(0xFF3BC0C3).withValues(alpha: 0.1), // TEKO Cyan tint
+                      width: 1,
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: Form(
+                      key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -64,26 +79,26 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 48),
+                    const SizedBox(height: 32),
                     Text(
-                      'MESSE CONNECT',
+                      'ANMELDUNG',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.outfit(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w100,
+                        fontSize: 28,
+                        fontWeight: FontWeight.w200,
                         letterSpacing: 4,
                         color: Colors.white,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'BITTE ANMELDEN',
+                      'BITTE DATEN EINGEBEN',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.inter(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w300,
-                        letterSpacing: 4,
-                        color: Colors.indigoAccent,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w400,
+                        letterSpacing: 3,
+                        color: const Color(0xFF3BC0C3), // TEKO Cyan
                       ),
                     ),
                     const SizedBox(height: 64),
@@ -106,10 +121,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           child: Text(
                             'PASSWORT',
                             style: GoogleFonts.inter(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w200,
-                              letterSpacing: 2.0,
-                              color: Colors.white.withValues(alpha: 0.5),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 1.5,
+                              color: Colors.white.withValues(alpha: 0.7),
                             ),
                           ),
                         ),
@@ -149,16 +164,38 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     authState.when(
                       data: (_) => ElevatedButton(
                         onPressed: _handleLogin,
-                        child: const Text('ANMELDEN'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF3BC0C3), // TEKO Cyan
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: const Text(
+                          'ANMELDEN',
+                          style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1),
+                        ),
                       ),
                       loading: () => const Center(
-                        child: CircularProgressIndicator(strokeWidth: 2),
+                        child: CircularProgressIndicator(color: Color(0xFF3BC0C3)),
                       ),
                       error: (err, _) => Column(
                         children: [
                           ElevatedButton(
                             onPressed: _handleLogin,
-                            child: const Text('ANMELDEN'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF3BC0C3), // TEKO Cyan
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 20),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                            child: const Text(
+                              'ANMELDEN',
+                              style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1),
+                            ),
                           ),
                           const SizedBox(height: 16),
                           Text(
@@ -201,7 +238,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         foregroundColor: Colors.white10,
                         textStyle: GoogleFonts.inter(
                           fontSize: 9,
-                          letterSpacing: 1,
                         ),
                       ),
                     ),

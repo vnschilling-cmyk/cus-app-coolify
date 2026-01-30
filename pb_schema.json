@@ -141,6 +141,24 @@
                 "presentable": true
             },
             {
+                "name": "first_name",
+                "type": "text",
+                "required": false,
+                "presentable": true
+            },
+            {
+                "name": "last_name",
+                "type": "text",
+                "required": false,
+                "presentable": true
+            },
+            {
+                "name": "email",
+                "type": "email",
+                "required": false,
+                "presentable": true
+            },
+            {
                 "name": "company",
                 "type": "text",
                 "required": false,
@@ -167,7 +185,7 @@
         ],
         "listRule": "@request.auth.id != ''",
         "viewRule": "@request.auth.id != ''",
-        "createRule": "@request.auth.id != ''",
+        "createRule": "",
         "updateRule": "@request.auth.id != ''",
         "deleteRule": "@request.auth.id != ''",
         "options": {}
