@@ -12,6 +12,7 @@ class AppTheme {
     useMaterial3: true,
     brightness: Brightness.light,
     primaryColor: primaryColor,
+    canvasColor: Colors.white,
     scaffoldBackgroundColor: const Color(0xFFF1F5F9), // Slate 100
     colorScheme: const ColorScheme.light(
       primary: primaryColor,
